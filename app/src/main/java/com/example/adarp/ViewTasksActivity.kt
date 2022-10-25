@@ -1,12 +1,11 @@
 package com.example.adarp
 
+import android.app.ActionBar.LayoutParams
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
@@ -47,6 +46,27 @@ class ViewTasksActivity : AppCompatActivity() {
         println("REFRESH")
     }
 
+    fun showTaskInBiggerWindow(id_task: String, worker: String, company: String, subejct: String){
+        val dialogBinding = layoutInflater.inflate(R.layout.activity_custom_dialog, null)
+        val myDialog = Dialog(this)
+        myDialog.setContentView(dialogBinding)
+        dialogBinding.findViewById<TextView>(R.id.idTask).text = "Zadanie numer ${id_task}"
+        dialogBinding.findViewById<TextView>(R.id.workerTask).text = "${worker}"
+        dialogBinding.findViewById<TextView>(R.id.companyTask).text = "${company}"
+        dialogBinding.findViewById<TextView>(R.id.subjectTask).text = "${subejct}"
+        myDialog.setCancelable(true)
+        myDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner)
+        val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
+        println("width: ${width}")
+        if(width <= 1200)
+            myDialog.window?.setLayout(width,LayoutParams.WRAP_CONTENT)
+        else
+            myDialog.window?.setLayout(1200,LayoutParams.WRAP_CONTENT)
+
+        myDialog.show()
+    }
+
+
     private fun loadArtists(taskList: MutableList<Task>, listView: ListView) {
         val stringRequest = StringRequest(Request.Method.GET,
             EndPoints.URL_GET_TASKS,
@@ -68,11 +88,16 @@ class ViewTasksActivity : AppCompatActivity() {
                         val adapter = TaskList(this@ViewTasksActivity, taskList)
                         listView.adapter = adapter
 
-                        listView.setOnItemClickListener { parent: AdapterView<*>, view: View, position: Int, id: Long ->
-                            Toast.makeText(this@ViewTasksActivity, "JPJP ${position}", Toast.LENGTH_SHORT).show()
-                        }
 
-                        println("adapter:${adapter}")
+
+                    }
+                    listView.setOnItemClickListener { parent: AdapterView<*>, view: View, position: Int, id: Long ->
+                        showTaskInBiggerWindow(
+                            taskList[position].getIdTask(),
+                            taskList[position].getWorkerTask(),
+                            taskList[position].getCompanyTask(),
+                            taskList[position].getSubjectTask()
+                        )
                     }
 
                 } catch (e: JSONException) {

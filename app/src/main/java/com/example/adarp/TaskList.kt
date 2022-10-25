@@ -11,6 +11,7 @@ import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -33,7 +34,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                 val imageButton = listViewItem.findViewById(R.id.imageButton) as ImageButton
 
                 imageButton.setOnClickListener {
-                        addArtist(
+                        ConfirmWindow(
                                 idtask.text.toString(),
                                 EndPoints.URL_ADD_TASKS_CLOSED,
                                 textViewWorker.text.toString(),
@@ -61,6 +62,24 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                 val sdf = SimpleDateFormat("yyyy/M/dd hh:mm:ss")
                 val currentDate = sdf.format(Date())
                 return currentDate
+        }
+
+        private fun ConfirmWindow(id_: String, url: String, worker: String, company: String, sub: String, date_: String){
+                MaterialAlertDialogBuilder(context)
+                        .setTitle("Potwierdz usunięcie")
+
+                        .setMessage("Czy na pewno chcesz usunąć zadanie o numerze ${id_}?")
+
+                        .setPositiveButton("Tak"){dialog, which ->
+                                addArtist(id_,url,worker,company,sub,date_)
+                                Toast.makeText(context, "Zadanie zostało usunięte", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        .setNeutralButton("Nie"){dialog, which ->
+
+                        }
+                        .show()
         }
 
 
