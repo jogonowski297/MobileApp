@@ -1,0 +1,138 @@
+package com.example.adarp
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
+
+abstract class ZadaniaAdd : AppCompatActivity(){
+
+    //edittext and spinner
+//    private var editTextArtistName: EditText? = null
+//    private var spinnerWorker: Spinner? = null
+//    private var spinnerCompany: Spinner? = null
+//    private var arrayCompanys: Array<String> = arrayOf()
+
+
+//    var spinner:Spinner? = null
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_zadania_add)
+
+
+
+
+//
+//        val list_of_items = arrayOf("Item 1", "Item 2", "Item 3")
+//        println("arrays from zadania 2:${Arrays.deepToString(list_of_items)}")
+//
+//        //getting it from xml
+//        editTextArtistName = findViewById(R.id.editTextArtistName) as EditText
+//        spinnerWorker = findViewById(R.id.spinnerWorker) as Spinner
+//        spinnerCompany = findViewById(R.id.spinnerCompany) as Spinner
+//
+//
+//        spinner = this.spinnerCompany
+//        spinner!!.setOnItemSelectedListener(this)
+//
+//        // Create an ArrayAdapter using a simple spinner layout and languages array
+//        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayCompanys)
+//        // Set layout to use when the list of choices appear
+//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        // Set Adapter to Spinner
+//        spinner!!.setAdapter(aa)
+
+
+//        val buttonaddart = findViewById<Button>(R.id.buttonAddArtist)
+//        buttonaddart.setOnClickListener {
+//            addArtist()
+//        }
+
+//
+//        val buttonviewart = findViewById<Button>(R.id.buttonViewArtist)
+//        buttonviewart.setOnClickListener {
+//            val intent = Intent(this, ViewArtistsActivity::class.java)
+//            startActivity(intent)
+//        }
+//
+//        val return_btn = findViewById<Button>(R.id.return_btn)
+//        return_btn.setOnClickListener{
+//            val Intent = Intent(this, MainActivity::class.java)
+//            startActivity(Intent)
+//        }
+    }
+
+//    //adding a new record to database
+//    private fun addArtist() {
+//        //getting the record values
+//        val name = editTextArtistName?.text.toString()
+//        val genre = spinnerWorker?.selectedItem.toString()
+//        println(genre)
+//
+//        //creating volley string request
+//        val stringRequest = object : StringRequest(Request.Method.POST, EndPoints.URL_ADD_ARTIST,
+//            Response.Listener<String> { response ->
+//                try {
+//                    val obj = JSONObject(response)
+//                    println("obj:$obj")
+//                    Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_LONG).show()
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                    println("cos:" + e.printStackTrace())
+//                }
+//            },
+//            object : Response.ErrorListener {
+//                override fun onErrorResponse(volleyError: VolleyError) {
+//                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG).show()
+//                }
+//            })
+//        {
+//            @Throws(AuthFailureError::class)
+//            override fun getParams(): Map<String, String> {
+//                val params = HashMap<String, String>()
+//                params.put("name", name)
+//                params.put("genre", genre)
+//                return params
+//            }
+//        }
+//
+//        //adding request to queue
+//        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+//    }
+//    override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
+//
+//    }
+//
+//    override fun onNothingSelected(arg0: AdapterView<*>) {
+//
+//    }
+
+//    private fun saveJSONToArray(json:JSONObject): Array<String> {
+//
+//        val item_sizeJsonArray = json.getJSONArray("result")
+//        for (i in 0 until item_sizeJsonArray.length()) {
+//            val object_ = item_sizeJsonArray[i] as JSONObject
+//            val name: String = object_.getString("company")
+//            arrayCompanys += name
+//        }
+//        return arrayCompanys
+//    }
+//    private fun GetJSON(){
+//        val stringRequest = StringRequest(
+//            Request.Method.GET,
+//            EndPoints.URL_GET_COMPANY,
+//            { s ->
+//                saveJSONToArray(JSONObject(s))
+//            },
+//            { volleyError -> Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG).show() })
+//        val requestQueue = Volley.newRequestQueue(this)
+//        requestQueue.add<String>(stringRequest)
+
+//    }
+
+
+
+
+
+}
