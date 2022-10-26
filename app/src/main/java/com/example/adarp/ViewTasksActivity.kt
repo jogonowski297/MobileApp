@@ -2,6 +2,7 @@ package com.example.adarp
 
 import android.app.ActionBar.LayoutParams
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -42,20 +43,22 @@ class ViewTasksActivity : AppCompatActivity() {
         }
     }
 
-    fun refresh(){
-        println("REFRESH")
+    fun refresh(context: Context, class_: Class<*>){
+        val intent = Intent(context, class_)
+        startActivity(intent)
     }
 
-    fun showTaskInBiggerWindow(id_task: String, worker: String, company: String, subejct: String){
-        val dialogBinding = layoutInflater.inflate(R.layout.activity_custom_dialog, null)
+    private fun showTaskInBiggerWindow(id_task: String,date: String, worker: String, company: String, subejct: String){
+        val dialogBinding = layoutInflater.inflate(R.layout.activity_custom_dialog_task, null)
         val myDialog = Dialog(this)
         myDialog.setContentView(dialogBinding)
         dialogBinding.findViewById<TextView>(R.id.idTask).text = "Zadanie numer ${id_task}"
+        dialogBinding.findViewById<TextView>(R.id.dateTask).text = "${date}"
         dialogBinding.findViewById<TextView>(R.id.workerTask).text = "${worker}"
         dialogBinding.findViewById<TextView>(R.id.companyTask).text = "${company}"
         dialogBinding.findViewById<TextView>(R.id.subjectTask).text = "${subejct}"
         myDialog.setCancelable(true)
-        myDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner)
+        myDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner_task)
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         println("width: ${width}")
         if(width <= 1200)
@@ -94,6 +97,7 @@ class ViewTasksActivity : AppCompatActivity() {
                     listView.setOnItemClickListener { parent: AdapterView<*>, view: View, position: Int, id: Long ->
                         showTaskInBiggerWindow(
                             taskList[position].getIdTask(),
+                            taskList[position].getDateTask(),
                             taskList[position].getWorkerTask(),
                             taskList[position].getCompanyTask(),
                             taskList[position].getSubjectTask()

@@ -17,6 +17,10 @@ class Task(val id_task: String, val worker: String, val company: String, val sub
         return subject
     }
 
+    fun getDateTask(): String{
+        return date
+    }
+
 }
 
 

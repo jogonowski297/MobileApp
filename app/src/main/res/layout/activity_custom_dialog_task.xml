@@ -19,6 +19,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/dateTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idTask" />
+
+    <TextView
         android:id="@+id/workerTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +37,7 @@
         android:text="worker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idTask" />
+        app:layout_constraintTop_toBottomOf="@+id/dateTask" />
 
     <TextView
         android:id="@+id/companyTask"

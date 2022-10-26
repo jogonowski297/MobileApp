@@ -1,17 +1,15 @@
 package com.example.adarp
 
+import android.app.ActionBar
 import android.app.Activity
+import android.app.Dialog
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -34,7 +32,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                 val imageButton = listViewItem.findViewById(R.id.imageButton) as ImageButton
 
                 imageButton.setOnClickListener {
-                        ConfirmWindow(
+                        showTaskInBiggerWindow(
                                 idtask.text.toString(),
                                 EndPoints.URL_ADD_TASKS_CLOSED,
                                 textViewWorker.text.toString(),
@@ -52,7 +50,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                 textViewWorker.text = artist.worker
                 textViewCompany.text = artist.company
                 textViewSubject.text = artist.subject
-                date.text = artist.date.toString()
+                date.text = artist.date
 
 
                 return listViewItem
@@ -64,39 +62,55 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                 return currentDate
         }
 
-        private fun ConfirmWindow(id_: String, url: String, worker: String, company: String, sub: String, date_: String){
-                MaterialAlertDialogBuilder(context)
-                        .setTitle("Potwierdz usunięcie")
 
-                        .setMessage("Czy na pewno chcesz usunąć zadanie o numerze ${id_}?")
+        private fun showTaskInBiggerWindow(id_task: String, url: String, worker: String, company: String, subejct: String,date: String){
+                val dialogBinding = context.layoutInflater.inflate(R.layout.activity_custom_dialog_delete, null)
+                val myDialog = Dialog(context)
+                myDialog.setContentView(dialogBinding)
+                dialogBinding.findViewById<TextView>(R.id.idTask).text = "Zadanie numer ${id_task}"
+                dialogBinding.findViewById<TextView>(R.id.dateTask).text = "${date}"
+                dialogBinding.findViewById<TextView>(R.id.workerTask).text = "${worker}"
+                dialogBinding.findViewById<TextView>(R.id.companyTask).text = "${company}"
+                dialogBinding.findViewById<TextView>(R.id.subjectTask).text = "${subejct}"
 
-                        .setPositiveButton("Tak"){dialog, which ->
-                                addArtist(id_,url,worker,company,sub,date_)
-                                Toast.makeText(context, "Zadanie zostało usunięte", Toast.LENGTH_SHORT).show()
+                myDialog.setCancelable(true)
+                myDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner_delete)
 
-                        }
+                val width = (context.resources.displayMetrics.widthPixels * 0.90).toInt()
 
-                        .setNeutralButton("Nie"){dialog, which ->
+                if(width <= 1200)
+                        myDialog.window?.setLayout(width, ActionBar.LayoutParams.WRAP_CONTENT)
+                else
+                        myDialog.window?.setLayout(1200, ActionBar.LayoutParams.WRAP_CONTENT)
 
-                        }
-                        .show()
+                val noBtn = dialogBinding.findViewById<Button>(R.id.noBtn)
+                val yesBtn = dialogBinding.findViewById<Button>(R.id.yesBtn)
+
+                noBtn.setOnClickListener {
+                        myDialog.dismiss()
+                }
+
+                yesBtn.setOnClickListener {
+                        deleteAndAddToEnded(id_task,url,worker,company,subejct,date)
+                        myDialog.dismiss()
+
+                }
+
+                myDialog.show()
         }
 
-
-        //adding a new record to database
-        private fun addArtist(id_: String, url: String, worker: String, company: String, sub: String, date_: String) {
-                //getting the record values
-                val id = id_.toInt()
+        
+        private fun deleteAndAddToEnded(task_id_: String, url: String, worker: String, company: String, sub: String, date_: String) {
+                val task_id = task_id_
                 val worker_id = worker
                 val company_id = company
                 val subject = sub
                 val date_add = date_
                 val date_close = getDateTime()
 
-                //creating volley string request
                 val stringRequest = object : StringRequest(
                         Method.POST, url,
-                        Response.Listener<String> { response ->
+                        Response.Listener { response ->
                                 try {
                                         val obj = JSONObject(response)
                                         Toast.makeText(context, obj.getString("message"), Toast.LENGTH_LONG)
@@ -114,7 +128,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                         @Throws(AuthFailureError::class)
                         override fun getParams(): Map<String, String> {
                                 val params = HashMap<String, String>()
-                                params.put("id", id.toString())
+                                params.put("task_id", task_id)
                                 params.put("worker_id", worker_id)
                                 params.put("company_id", company_id)
                                 params.put("subject", subject)
@@ -125,9 +139,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                         }
                 }
 
-                //adding request to queue
                 VolleySingleton.instance?.addToRequestQueue(stringRequest)
-                ViewTasksActivity().refresh()
         }
 
 }
