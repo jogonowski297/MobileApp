@@ -54,13 +54,14 @@ class MainActivity : AppCompatActivity() {
                 val jarraylen = jarray.length()
                 btn.setText(jarraylen.toString())
                 if(jarraylen > 10) {
-                    btn.setBackgroundColor(resources.getColor(R.color.full))
+                    btn.setTextColor(resources.getColor(R.color.full))
+//                    btn.setBackgroundColor(resources.getColor(R.color.full))
                 }
                 if(jarraylen in 7..10) {
-                    btn.setBackgroundColor(resources.getColor(R.color.many))
+                    btn.setTextColor(resources.getColor(R.color.many))
                 }
                 if(jarraylen in 0..6) {
-                    btn.setBackgroundColor(resources.getColor(R.color.little))
+                    btn.setTextColor(resources.getColor(R.color.little))
                 }
 
             },

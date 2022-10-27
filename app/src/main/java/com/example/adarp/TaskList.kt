@@ -30,7 +30,6 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>) : 
                 val date = listViewItem.findViewById(R.id.date) as TextView
 
                 val imageButton = listViewItem.findViewById(R.id.imageButton) as ImageButton
-
                 imageButton.setOnClickListener {
                         showTaskInBiggerWindow(
                                 idtask.text.toString(),
