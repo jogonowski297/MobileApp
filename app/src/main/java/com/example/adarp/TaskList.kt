@@ -1,34 +1,48 @@
 package com.example.adarp
 
+import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.Activity
 import android.app.Dialog
+import android.graphics.Color
+import android.icu.text.Transliterator.Position
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import com.android.volley.AuthFailureError
+import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class TaskList(private val context: Activity, internal var tasks: List<Task>) : ArrayAdapter<Task>(context, R.layout.layout_list_task, tasks) {
-
+class TaskList(private val context: Activity, internal var tasks: List<Task>, private val orkersColors: List<Worker>) : ArrayAdapter<Task>(context, R.layout.layout_list_task, tasks) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-
                 val inflater = context.layoutInflater
                 val listViewItem = inflater.inflate(R.layout.layout_list_task, null, true)
+
+
+                val cardView = listViewItem.findViewById(R.id.cardView) as CardView
+
+
+                cardView.setCardBackgroundColor(position)
+                println("concrete View: ${tasks[position].getWorkerTask()}")
+                if(tasks[position].getWorkerTask() == "Kuba")
+                        cardView.setCardBackgroundColor(Color.parseColor("#3173f7"))
+
+
                 val idtask = listViewItem.findViewById(R.id.id_task) as TextView
                 val textViewWorker = listViewItem.findViewById(R.id.textViewWorker) as TextView
                 val textViewCompany = listViewItem.findViewById(R.id.textViewCompany) as TextView
                 val textViewSubject = listViewItem.findViewById(R.id.textViewSubject) as TextView
                 val date = listViewItem.findViewById(R.id.date) as TextView
-
                 val imageButton = listViewItem.findViewById(R.id.imageButton) as ImageButton
                 imageButton.setOnClickListener {
                         showTaskInBiggerWindow(

@@ -4,6 +4,7 @@ import android.app.ActionBar.LayoutParams
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -69,6 +70,38 @@ class ViewTasksActivity : AppCompatActivity() {
         myDialog.show()
     }
 
+    private fun getTaskColor() {
+        val stringRequest = StringRequest(Request.Method.GET,
+            EndPoints.URL_GET_COLOR_USERS,
+            { s ->
+                try {
+                    val obj = JSONObject(s)
+                    val array = obj.getJSONArray("result")
+
+                    for (i in 0..array.length() - 1) {
+                        val objectArtist = array.getJSONObject(i)
+                        println("worker: ${objectArtist.getString("worker")}")
+                        println("worker: ${objectArtist.getString("color")}")
+                        val worker = Worker(
+                            objectArtist.getString("worker"),
+                            objectArtist.getString("color")
+                        )
+
+                        workersColors.add(worker)
+                    }
+                    println("DDDDDDDDDDDDDDDDDDDDDDDDD: ${workersColors[0].getWorkerStr()}")
+
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            },
+            { volleyError -> Toast.makeText(context, volleyError.message, Toast.LENGTH_LONG).show() })
+
+        val requestQueue = Volley.newRequestQueue(context)
+        requestQueue.add<String>(stringRequest)
+    }
+
 
     private fun loadArtists(taskList: MutableList<Task>, listView: ListView) {
         val stringRequest = StringRequest(Request.Method.GET,
@@ -89,9 +122,8 @@ class ViewTasksActivity : AppCompatActivity() {
                         )
                         taskList.add(task)
                         val adapter = TaskList(this@ViewTasksActivity, taskList)
+
                         listView.adapter = adapter
-
-
 
                     }
                     listView.setOnItemClickListener { parent: AdapterView<*>, view: View, position: Int, id: Long ->

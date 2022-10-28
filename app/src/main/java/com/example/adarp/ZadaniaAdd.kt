@@ -108,19 +108,15 @@ class ZadaniaAdd : AppCompatActivity() {
                     val data = response.toString()
                     val jobj = JSONObject(data)
                     val jarray = jobj.getJSONArray("result")
-                    val jarraylen = jarray.length()
                     val request1 = StringRequest(
                         Request.Method.GET, EndPoints.URL_GET_TASKS_CLOSED,
                         Response.Listener { response ->
-                            try {
-                                val data1 = response.toString()
-                                val jobj1 = JSONObject(data1)
-                                val jarray1 = jobj1.getJSONArray("result")
-                                val jarraylen1 = jarray1.length()
-                                addArtist(jarraylen1.toInt() + jarraylen.toInt() + 1)
-                            }catch (e: JSONException) {
-                                addArtist(1)
-                            }
+
+                        val data1 = response.toString()
+                        val jobj1 = JSONObject(data1)
+                        val jarray1 = jobj1.getJSONArray("result")
+                        addArtist()
+
 
                         },
                         Response.ErrorListener { error ->
@@ -139,9 +135,8 @@ class ZadaniaAdd : AppCompatActivity() {
     }
 
     //adding a new record to database
-    private fun addArtist(len: Int) {
+    private fun addArtist() {
         //getting the record values
-        val id = len
         val worker_id = spinnerWorker?.selectedItem.toString()
         val company_id = spinnerCompany?.selectedItem.toString()
         val subject = editTextArtistName?.text.toString()
@@ -168,7 +163,6 @@ class ZadaniaAdd : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params.put("id", id.toString())
                 params.put("worker_id", worker_id.slice(9..9))
                 params.put("company_id", company_id.slice(9..9))
                 params.put("subject", subject)
