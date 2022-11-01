@@ -37,8 +37,8 @@ class ZadaniaAdd : AppCompatActivity() {
         spinnerWorker = findViewById(R.id.spinnerWorker) as Spinner
         spinnerCompany= findViewById(R.id.spinnerCompany) as Spinner
 
-        downloadTask(EndPoints.URL_GET_COMPANY,"result", "company", spinnerCompany!!)
-        downloadTask(EndPoints.URL_GET_WORKERS,"result", "worker", spinnerWorker!!)
+        downloadDataToSpinner(EndPoints.URL_GET_COMPANY,"result", "company", spinnerCompany!!)
+        downloadDataToSpinner(EndPoints.URL_GET_WORKERS,"result", "worker", spinnerWorker!!)
 
 
 
@@ -68,7 +68,7 @@ class ZadaniaAdd : AppCompatActivity() {
         return currentDate
     }
 
-    private fun downloadTask(url: String, arr_name: String, key: String, spi: Spinner) {
+    private fun downloadDataToSpinner(url: String, arr_name: String, key: String, spi: Spinner) {
         val pd = ProgressDialog(this)
         pd.setMessage("downloading...")
         pd.show()

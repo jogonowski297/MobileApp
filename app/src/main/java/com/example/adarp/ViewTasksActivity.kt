@@ -4,7 +4,7 @@ import android.app.ActionBar.LayoutParams
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -21,15 +21,18 @@ class ViewTasksActivity : AppCompatActivity() {
 //    private var taskList: MutableList<Task>? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_tasks)
 
+        val sharedPreference =  getSharedPreferences("COLORS",Context.MODE_PRIVATE)
+
         val listView = findViewById<ListView>(R.id.listViewTasks)
         val taskList: MutableList<Task> = mutableListOf()
 
-        loadArtists(taskList, listView)
+        getTaskColor(sharedPreference)
+        loadArtists(taskList, listView, sharedPreference)
+
 
         val home_btn = findViewById<Button>(R.id.home_btn)
         home_btn.setOnClickListener{
@@ -70,40 +73,38 @@ class ViewTasksActivity : AppCompatActivity() {
         myDialog.show()
     }
 
-    private fun getTaskColor() {
+    private fun getTaskColor(sharedPreference: SharedPreferences) {
         val stringRequest = StringRequest(Request.Method.GET,
             EndPoints.URL_GET_COLOR_USERS,
             { s ->
                 try {
+                    val editor = sharedPreference.edit()
                     val obj = JSONObject(s)
                     val array = obj.getJSONArray("result")
+                    val workersList: MutableList<String> = mutableListOf()
 
                     for (i in 0..array.length() - 1) {
                         val objectArtist = array.getJSONObject(i)
-                        println("worker: ${objectArtist.getString("worker")}")
-                        println("worker: ${objectArtist.getString("color")}")
-                        val worker = Worker(
-                            objectArtist.getString("worker"),
-                            objectArtist.getString("color")
-                        )
+                        editor.putString("${objectArtist.getString("worker")}","${objectArtist.getString("color")}")
+                        workersList.add(objectArtist.getString("worker"))
 
-                        workersColors.add(worker)
                     }
-                    println("DDDDDDDDDDDDDDDDDDDDDDDDD: ${workersColors[0].getWorkerStr()}")
 
+                    editor.putString("workers", workersList.toString())
+                    editor.commit()
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
             },
-            { volleyError -> Toast.makeText(context, volleyError.message, Toast.LENGTH_LONG).show() })
+            { volleyError -> Toast.makeText(this, volleyError.message, Toast.LENGTH_LONG).show() })
 
-        val requestQueue = Volley.newRequestQueue(context)
+        val requestQueue = Volley.newRequestQueue(this)
         requestQueue.add<String>(stringRequest)
     }
 
 
-    private fun loadArtists(taskList: MutableList<Task>, listView: ListView) {
+    private fun loadArtists(taskList: MutableList<Task>, listView: ListView, sharedPreference: SharedPreferences) {
         val stringRequest = StringRequest(Request.Method.GET,
             EndPoints.URL_GET_TASKS,
             { s ->
@@ -121,7 +122,8 @@ class ViewTasksActivity : AppCompatActivity() {
                             objectArtist.getString("date_add")
                         )
                         taskList.add(task)
-                        val adapter = TaskList(this@ViewTasksActivity, taskList)
+
+                        val adapter = TaskList(this@ViewTasksActivity, taskList, sharedPreference)
 
                         listView.adapter = adapter
 

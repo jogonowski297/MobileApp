@@ -4,38 +4,49 @@ import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.Activity
 import android.app.Dialog
+import android.content.SharedPreferences
 import android.graphics.Color
-import android.icu.text.Transliterator.Position
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
 import com.android.volley.AuthFailureError
-import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class TaskList(private val context: Activity, internal var tasks: List<Task>, private val orkersColors: List<Worker>) : ArrayAdapter<Task>(context, R.layout.layout_list_task, tasks) {
+class TaskList(private val context: Activity, internal var tasks: List<Task>, var sharedPreference: SharedPreferences) : ArrayAdapter<Task>(context, R.layout.layout_list_task, tasks) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val inflater = context.layoutInflater
                 val listViewItem = inflater.inflate(R.layout.layout_list_task, null, true)
-
 
                 val cardView = listViewItem.findViewById(R.id.cardView) as CardView
 
 
                 cardView.setCardBackgroundColor(position)
                 println("concrete View: ${tasks[position].getWorkerTask()}")
-                if(tasks[position].getWorkerTask() == "Kuba")
-                        cardView.setCardBackgroundColor(Color.parseColor("#3173f7"))
+
+                val result = sharedPreference.getString("workers", "XXX")
+
+                val list = Regex("\\w+")
+                        .findAll(result.toString())
+                        .toList()
+                        .map { it.value }
+
+                for (i in list){
+                        if(tasks[position].getWorkerTask() == i) {
+                                val color = sharedPreference.getString(i, "#FF00C9")
+                                cardView.setCardBackgroundColor(Color.parseColor(color))
+                        }
+                }
+//                if(tasks[position].getWorkerTask() == sharedPreference.getString(""))
+//                        cardView.setCardBackgroundColor(Color.parseColor("#3173f7"))
 
 
                 val idtask = listViewItem.findViewById(R.id.id_task) as TextView
