@@ -47,10 +47,6 @@ class ViewTasksActivity : AppCompatActivity() {
         }
     }
 
-    fun refresh(context: Context, class_: Class<*>){
-        val intent = Intent(context, class_)
-        startActivity(intent)
-    }
 
     private fun showTaskInBiggerWindow(id_task: String,date: String, worker: String, company: String, subejct: String){
         val dialogBinding = layoutInflater.inflate(R.layout.activity_custom_dialog_task, null)
@@ -100,7 +96,7 @@ class ViewTasksActivity : AppCompatActivity() {
             { volleyError -> Toast.makeText(this, volleyError.message, Toast.LENGTH_LONG).show() })
 
         val requestQueue = Volley.newRequestQueue(this)
-        requestQueue.add<String>(stringRequest)
+        requestQueue.add(stringRequest)
     }
 
 

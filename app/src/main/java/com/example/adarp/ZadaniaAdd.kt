@@ -44,7 +44,9 @@ class ZadaniaAdd : AppCompatActivity() {
 
         val buttonaddart = findViewById<Button>(R.id.buttonAddArtist)
         buttonaddart.setOnClickListener {
-            getLenTasksAndAddTask(EndPoints.URL_GET_TASKS)
+            addArtist()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -100,39 +102,7 @@ class ZadaniaAdd : AppCompatActivity() {
         queue.add(request)
     }
 
-    fun getLenTasksAndAddTask(url:String){
-        val queue = Volley.newRequestQueue(this)
-        val request = StringRequest(
-            Request.Method.GET, url,
-            { response ->
-                    val data = response.toString()
-                    val jobj = JSONObject(data)
-                    val jarray = jobj.getJSONArray("result")
-                    val request1 = StringRequest(
-                        Request.Method.GET, EndPoints.URL_GET_TASKS_CLOSED,
-                        Response.Listener { response ->
 
-                        val data1 = response.toString()
-                        val jobj1 = JSONObject(data1)
-                        val jarray1 = jobj1.getJSONArray("result")
-                        addArtist()
-
-
-                        },
-                        Response.ErrorListener { error ->
-                            val er = error.toString()
-                            Log.e("error", er)
-                        })
-                queue.add(request1)
-
-            },
-            { error ->
-                val er = error.toString()
-                Log.e("error", er)
-            })
-
-        queue.add(request)
-    }
 
     //adding a new record to database
     private fun addArtist() {
@@ -141,11 +111,14 @@ class ZadaniaAdd : AppCompatActivity() {
         val company_id = spinnerCompany?.selectedItem.toString()
         val subject = editTextArtistName?.text.toString()
         val date = getDateTime()
-        //creating volley string request
+        println("11111111111")
+
         val stringRequest = object : StringRequest(
-            Method.POST, EndPoints.URL_ADD_ARTIST,
-            Response.Listener<String> { response ->
+            Method.POST, EndPoints.URL_ADD_ARTIST_1,
+            Response.Listener{ response ->
+                println("22222222")
                 try {
+                    println("333333333")
                     val obj = JSONObject(response)
                     Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_LONG)
                         .show()
@@ -162,6 +135,7 @@ class ZadaniaAdd : AppCompatActivity() {
             }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
+                println("44444444444")
                 val params = HashMap<String, String>()
                 params.put("worker_id", worker_id.slice(9..9))
                 params.put("company_id", company_id.slice(9..9))
@@ -171,13 +145,9 @@ class ZadaniaAdd : AppCompatActivity() {
                 return params
             }
         }
-
         //adding request to queue
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
 
-        val intent = Intent(this, ViewTasksActivity::class.java)
-        finish()
-        startActivity(intent)
     }
 
 

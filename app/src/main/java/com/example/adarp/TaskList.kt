@@ -1,6 +1,5 @@
 package com.example.adarp
 
-import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.Activity
 import android.app.Dialog
@@ -27,13 +26,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                 val listViewItem = inflater.inflate(R.layout.layout_list_task, null, true)
 
                 val cardView = listViewItem.findViewById(R.id.cardView) as CardView
-
-
-                cardView.setCardBackgroundColor(position)
-                println("concrete View: ${tasks[position].getWorkerTask()}")
-
                 val result = sharedPreference.getString("workers", "XXX")
-
                 val list = Regex("\\w+")
                         .findAll(result.toString())
                         .toList()
@@ -45,9 +38,6 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                                 cardView.setCardBackgroundColor(Color.parseColor(color))
                         }
                 }
-//                if(tasks[position].getWorkerTask() == sharedPreference.getString(""))
-//                        cardView.setCardBackgroundColor(Color.parseColor("#3173f7"))
-
 
                 val idtask = listViewItem.findViewById(R.id.id_task) as TextView
                 val textViewWorker = listViewItem.findViewById(R.id.textViewWorker) as TextView
@@ -58,16 +48,13 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                 imageButton.setOnClickListener {
                         showTaskInBiggerWindow(
                                 idtask.text.toString(),
-                                EndPoints.URL_ADD_TASKS_CLOSED,
+                                EndPoints.URL_ADD_TASKS_CLOSED_1,
                                 textViewWorker.text.toString(),
                                 textViewCompany.text.toString(),
                                 textViewSubject.text.toString(),
                                 date.text.toString()
                         )
                 }
-
-//                textViewSubject.invalidate()
-
 
                 val artist = tasks[position]
                 idtask.text = artist.id_task
@@ -137,8 +124,8 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                         Response.Listener { response ->
                                 try {
                                         val obj = JSONObject(response)
-                                        Toast.makeText(context, obj.getString("message"), Toast.LENGTH_LONG)
-                                                .show()
+                                        Toast.makeText(context, obj.getString("message"), Toast.LENGTH_LONG).show()
+
                                 } catch (e: JSONException) {
                                         e.printStackTrace()
                                 }
