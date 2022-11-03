@@ -7,7 +7,10 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
@@ -44,8 +47,8 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                 val textViewCompany = listViewItem.findViewById(R.id.textViewCompany) as TextView
                 val textViewSubject = listViewItem.findViewById(R.id.textViewSubject) as TextView
                 val date = listViewItem.findViewById(R.id.date) as TextView
-                val imageButton = listViewItem.findViewById(R.id.imageButton) as ImageButton
-                imageButton.setOnClickListener {
+                val btn_end = listViewItem.findViewById(R.id.btn_end) as Button
+                btn_end.setOnClickListener {
                         showTaskInBiggerWindow(
                                 idtask.text.toString(),
                                 EndPoints.URL_ADD_TASKS_CLOSED_1,

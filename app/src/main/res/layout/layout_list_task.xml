@@ -33,7 +33,7 @@
 
 
         <LinearLayout
-            android:layout_width="325dp"
+            android:layout_width="207dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -61,7 +61,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="326dp"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
@@ -75,7 +75,7 @@
 
                 <TextView
                     android:id="@+id/date"
-                    android:layout_width="211dp"
+                    android:layout_width="146dp"
                     android:layout_height="match_parent"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -91,15 +91,42 @@
 
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="10dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_dialog"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_end"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/end"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/edit"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btn_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/remove"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>
