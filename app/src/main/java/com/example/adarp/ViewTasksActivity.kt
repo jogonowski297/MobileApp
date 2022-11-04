@@ -33,6 +33,7 @@ class ViewTasksActivity : AppCompatActivity() {
         getTaskColor(sharedPreference)
         loadArtists(taskList, listView, sharedPreference)
 
+        println("shared: $sharedPreference")
 
         val home_btn = findViewById<Button>(R.id.home_btn)
         home_btn.setOnClickListener{
@@ -81,7 +82,8 @@ class ViewTasksActivity : AppCompatActivity() {
 
                     for (i in 0..array.length() - 1) {
                         val objectArtist = array.getJSONObject(i)
-                        editor.putString("${objectArtist.getString("worker")}","${objectArtist.getString("color")}")
+                        editor.putString("${objectArtist.getString("worker")}_color","${objectArtist.getString("color")}")
+                        editor.putString("${objectArtist.getString("worker")}_id","${objectArtist.getString("id")}")
                         workersList.add(objectArtist.getString("worker"))
 
                     }

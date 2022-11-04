@@ -114,7 +114,7 @@ class ZadaniaAdd : AppCompatActivity() {
         println("11111111111")
 
         val stringRequest = object : StringRequest(
-            Method.POST, EndPoints.URL_ADD_ARTIST_1,
+            Method.POST, EndPoints.URL_ADD_ARTIST,
             Response.Listener{ response ->
                 println("22222222")
                 try {

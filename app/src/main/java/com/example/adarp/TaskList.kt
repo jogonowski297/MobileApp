@@ -30,14 +30,17 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
 
                 val cardView = listViewItem.findViewById(R.id.cardView) as CardView
                 val result = sharedPreference.getString("workers", "XXX")
+                println("result: $result")
                 val list = Regex("\\w+")
                         .findAll(result.toString())
                         .toList()
                         .map { it.value }
+                val workerName = tasks[position].getWorkerTask()
 
                 for (i in list){
-                        if(tasks[position].getWorkerTask() == i) {
-                                val color = sharedPreference.getString(i, "#FF00C9")
+                        if(workerName == i) {
+                                val color = sharedPreference.getString("${i}_color", "#FF00C9")
+                                println("color: $color")
                                 cardView.setCardBackgroundColor(Color.parseColor(color))
                         }
                 }
@@ -48,10 +51,11 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                 val textViewSubject = listViewItem.findViewById(R.id.textViewSubject) as TextView
                 val date = listViewItem.findViewById(R.id.date) as TextView
                 val btn_end = listViewItem.findViewById(R.id.btn_end) as Button
+
                 btn_end.setOnClickListener {
                         showTaskInBiggerWindow(
                                 idtask.text.toString(),
-                                EndPoints.URL_ADD_TASKS_CLOSED_1,
+                                EndPoints.URL_ADD_TASKS_CLOSED,
                                 textViewWorker.text.toString(),
                                 textViewCompany.text.toString(),
                                 textViewSubject.text.toString(),
@@ -116,7 +120,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
         
         private fun deleteAndAddToEnded(task_id_: String, url: String, worker: String, company: String, sub: String, date_: String) {
                 val task_id = task_id_
-                val worker_id = worker
+                val worker_id = sharedPreference.getString("${worker}_id", "XXX").toString()
                 val company_id = company
                 val subject = sub
                 val date_add = date_
