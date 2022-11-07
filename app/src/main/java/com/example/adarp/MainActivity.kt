@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val req = Requests()
-        req.getCompanys()
+//        val req = Requests()
+//        req.getCompanys()
 
 
 

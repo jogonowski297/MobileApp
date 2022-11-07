@@ -31,7 +31,7 @@ class ViewTasksActivity : AppCompatActivity() {
         val taskList: MutableList<Task> = mutableListOf()
 
         getTaskColor(sharedPreference)
-        loadArtists(taskList, listView, sharedPreference)
+        loadTasks(taskList, listView, sharedPreference)
 
         println("shared: $sharedPreference")
 
@@ -102,7 +102,7 @@ class ViewTasksActivity : AppCompatActivity() {
     }
 
 
-    private fun loadArtists(taskList: MutableList<Task>, listView: ListView, sharedPreference: SharedPreferences) {
+    private fun loadTasks(taskList: MutableList<Task>, listView: ListView, sharedPreference: SharedPreferences) {
         val stringRequest = StringRequest(Request.Method.GET,
             EndPoints.URL_GET_TASKS,
             { s ->

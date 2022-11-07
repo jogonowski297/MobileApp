@@ -22,11 +22,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class TaskList(private val context: Activity, internal var tasks: List<Task>, var sharedPreference: SharedPreferences) : ArrayAdapter<Task>(context, R.layout.layout_list_task, tasks) {
+class TaskList(private val context: Activity, internal var tasks: List<Task>, var sharedPreference: SharedPreferences) : ArrayAdapter<Task>(context, R.layout.activity_task_list, tasks) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val inflater = context.layoutInflater
-                val listViewItem = inflater.inflate(R.layout.layout_list_task, null, true)
+                val listViewItem = inflater.inflate(R.layout.activity_task_list, null, true)
 
                 val cardView = listViewItem.findViewById(R.id.cardView) as CardView
                 val result = sharedPreference.getString("workers", "XXX")
