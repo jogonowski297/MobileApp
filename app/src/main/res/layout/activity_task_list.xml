@@ -74,7 +74,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/date"
+                    android:id="@+id/textViewDate"
                     android:layout_width="146dp"
                     android:layout_height="match_parent"
                     android:textSize="10sp" />

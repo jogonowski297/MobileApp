@@ -117,7 +117,8 @@ class ViewTasksActivity : AppCompatActivity() {
                             objectArtist.getString("worker"),
                             objectArtist.getString("company"),
                             objectArtist.getString("subject"),
-                            objectArtist.getString("date_add")
+                            objectArtist.getString("date_add"),
+                            "#428af5"
                         )
                         taskList.add(task)
 

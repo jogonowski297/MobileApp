@@ -49,7 +49,7 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                 val textViewWorker = listViewItem.findViewById(R.id.textViewWorker) as TextView
                 val textViewCompany = listViewItem.findViewById(R.id.textViewCompany) as TextView
                 val textViewSubject = listViewItem.findViewById(R.id.textViewSubject) as TextView
-                val date = listViewItem.findViewById(R.id.date) as TextView
+                val date = listViewItem.findViewById(R.id.textViewDate) as TextView
                 val btn_end = listViewItem.findViewById(R.id.btn_end) as Button
 
                 btn_end.setOnClickListener {
