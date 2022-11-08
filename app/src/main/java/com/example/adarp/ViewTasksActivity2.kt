@@ -3,11 +3,11 @@ package com.example.adarp
 import android.app.ActionBar
 import android.app.Dialog
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
@@ -20,7 +20,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ViewTasksActivity2 : AppCompatActivity() {
 
@@ -29,10 +28,12 @@ class ViewTasksActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_tasks2)
         val tasksInMemory = getSharedPreferences("ALL_TASKS", MODE_PRIVATE)
-        val colorInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
+        val workersInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
+        val companyInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
 
         getTasks(tasksInMemory)
-        getTaskColor(colorInMemory)
+        getDataFromWorker(workersInMemory)
+        getDataFromCompany(companyInMemory)
 
 
 
@@ -41,20 +42,17 @@ class ViewTasksActivity2 : AppCompatActivity() {
         val data = ArrayList<Task>()
 
 
-        val result = colorInMemory.getString("workers", "XXX")
+        val result = workersInMemory.getString("workers", "XXX")
         val list = Regex("\\w+")
             .findAll(result.toString())
             .toList()
             .map { it.value }   // zwraca [Kuba, Bartek, Krzysiek]
 
 
-
-
-
         for (i in 0..tasksInMemory.getInt("taskInMemorySize", 0)) {
             for(j in list){
                 if(tasksInMemory.getString("${i}_task_worker", "ERROR").toString() == j){
-                    val color = colorInMemory.getString("${j}_color", "#FF00C9")
+                    val color = workersInMemory.getString("${j}_color", "#FF00C9")
                     data.add(Task(
                         tasksInMemory.getString("${i}_task_id", "ERROR").toString(),
                         tasksInMemory.getString("${i}_task_worker", "ERROR").toString(),
@@ -70,7 +68,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
         val adapter = CustomAdapter2(data)
         recyclerview.adapter = adapter
 
-
+    //    Po kliknieciu na zadanie zostaje wyswielone w większym oknie dla lepszego widoku
         recyclerview.layoutManager = LinearLayoutManager(this)
         adapter.onItemClick = { Task ->
             showTaskInBiggerWindow(
@@ -82,19 +80,17 @@ class ViewTasksActivity2 : AppCompatActivity() {
             )
         }
 
-        val btn_end = recyclerview.findViewById<Button>(R.id.btn_end)
-
-        btn_end.setOnClickListener {
-            println("TeRAZ tu: ${recyclerview.findViewById<TextView>(R.id.textViewWorker)}")
+    //    Po kliknieciu przycisku zadanie zostaje uznane za zakonczone, usuwane z tabeli task, a dodawane do tabeli task_closed
+        adapter.onBtnClick = { Task ->
             showTaskInBiggerWindow_delete(
-                recyclerview.findViewById<TextView>(R.id.id_task).toString(),
+                Task.getIdTask(),
                 EndPoints.URL_ADD_TASKS_CLOSED,
-                recyclerview.findViewById<TextView>(R.id.textViewWorker).toString(),
-                recyclerview.findViewById<TextView>(R.id.textViewCompany).toString(),
-                recyclerview.findViewById<TextView>(R.id.textViewSubject).toString(),
-                recyclerview.findViewById<TextView>(R.id.textViewDate).toString(),
-                colorInMemory
-
+                Task.getWorkerTask(),
+                Task.getCompanyTask(),
+                Task.getSubjectTask(),
+                Task.getDateTask(),
+                workersInMemory,
+                companyInMemory
             )
         }
 
@@ -122,7 +118,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
         myDialog.show()
     }
 
-    private fun getTaskColor(sharedPreference: SharedPreferences) {
+    private fun getDataFromWorker(sharedPreference: SharedPreferences) {
         val stringRequest = StringRequest(Request.Method.GET,
             EndPoints.URL_GET_COLOR_USERS,
             { s ->
@@ -141,7 +137,38 @@ class ViewTasksActivity2 : AppCompatActivity() {
                     }
 
                     editor.putString("workers", workersList.toString())
-                    editor.commit()
+                    editor.apply()
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            },
+            { volleyError -> Toast.makeText(this, volleyError.message, Toast.LENGTH_LONG).show() })
+
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(stringRequest)
+    }
+
+    private fun getDataFromCompany(sharedPreference: SharedPreferences) {
+        val stringRequest = StringRequest(Request.Method.GET,
+            EndPoints.URL_GET_COMPANY,
+            { s ->
+                try {
+                    val editor = sharedPreference.edit()
+                    val obj = JSONObject(s)
+                    val array = obj.getJSONArray("result")
+                    val workersList: MutableList<String> = mutableListOf()
+
+                    for (i in 0..array.length() - 1) {
+                        val objectArtist = array.getJSONObject(i)
+                        editor.putString("${objectArtist.getString("company")}_id","${objectArtist.getString("id")}")
+                        editor.putString("${objectArtist.getString("id")}_company","${objectArtist.getString("company")}")
+                        workersList.add(objectArtist.getString("company"))
+
+                    }
+
+                    editor.putString("company", workersList.toString())
+                    editor.apply()
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -184,13 +211,15 @@ class ViewTasksActivity2 : AppCompatActivity() {
         requestQueue.add(stringRequest)
     }
 
+
+
     private fun getDateTime(): String {
         val sdf = SimpleDateFormat("yyyy/M/dd hh:mm:ss")
         val currentDate = sdf.format(Date())
         return currentDate
     }
 
-    private fun showTaskInBiggerWindow_delete(id_task: String, url: String, worker: String, company: String, subejct: String,date: String, colorInMemory: SharedPreferences){
+    private fun showTaskInBiggerWindow_delete(id_task: String, url: String, worker: String, company: String, subejct: String, date: String, colorInMemory: SharedPreferences, companyInMemory: SharedPreferences){
         val dialogBinding = this.layoutInflater.inflate(R.layout.activity_custom_dialog_delete, null)
         val myDialog = Dialog(this)
         myDialog.setContentView(dialogBinding)
@@ -218,7 +247,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
         }
 
         yesBtn.setOnClickListener {
-            deleteAndAddToEnded(id_task,url,worker,company,subejct,date, colorInMemory)
+            deleteAndAddToEnded(id_task,url,worker,company,subejct,date, colorInMemory, companyInMemory)
             myDialog.dismiss()
 
         }
@@ -226,10 +255,10 @@ class ViewTasksActivity2 : AppCompatActivity() {
         myDialog.show()
     }
 
-    private fun deleteAndAddToEnded(task_id_: String, url: String, worker: String, company: String, sub: String, date_: String, colorInMemory: SharedPreferences) {
+    private fun deleteAndAddToEnded(task_id_: String, url: String, worker: String, company: String, sub: String, date_: String, colorInMemory: SharedPreferences, companyInMemory: SharedPreferences) {
         val task_id = task_id_
-        val worker_id = colorInMemory.getString("${worker}_id", "XXX").toString()
-        val company_id = company
+        val worker_id = colorInMemory.getString("${worker}_id", "ERRORDA").toString()
+        val company_id = colorInMemory.getString("${company}_id", "ERROR").toString()
         val subject = sub
         val date_add = date_
         val date_close = getDateTime()

@@ -1,32 +1,23 @@
 package com.example.adarp
 
-import android.app.ActionBar
-import android.app.Dialog
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.AuthFailureError
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.StringRequest
-import org.json.JSONException
-import org.json.JSONObject
-import java.util.HashMap
 
 class CustomAdapter2(private val mList: List<Task>) : RecyclerView.Adapter<CustomAdapter2.ViewHolder>() {
 
     var onItemClick: ((Task) -> Unit)? = null
+    var onBtnClick: ((Task) -> Unit)? = null
+
 
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
         // inflates the card_view_design view
         // that is used to hold list item
         val view = LayoutInflater.from(parent.context)
@@ -58,7 +49,7 @@ class CustomAdapter2(private val mList: List<Task>) : RecyclerView.Adapter<Custo
 
 
     // Holds the views for adding it to image and text
-    inner class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
+    inner class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView), View.OnClickListener, View.OnLongClickListener{
         var id_task: TextView = itemView.findViewById(R.id.id_task)
         var textViewWorker: TextView = itemView.findViewById(R.id.textViewWorker)
         var textViewCompany: TextView = itemView.findViewById(R.id.textViewCompany)
@@ -72,7 +63,24 @@ class CustomAdapter2(private val mList: List<Task>) : RecyclerView.Adapter<Custo
                 onItemClick?.invoke(mList[adapterPosition])
             }
 
+            btn_end.setOnClickListener {
+                onBtnClick?.invoke(mList[adapterPosition])
+            }
+
         }
+
+
+
+        override fun onClick(v: View?) {
+            println("TU TUTUT TUTU: $btn_end")
+
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            TODO("Not yet implemented")
+        }
+
+
     }
 
 
