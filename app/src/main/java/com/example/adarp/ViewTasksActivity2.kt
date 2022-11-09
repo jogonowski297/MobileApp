@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
@@ -26,10 +25,10 @@ import java.util.*
 
 class ViewTasksActivity2 : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_tasks2)
+
         val tasksInMemory = getSharedPreferences("ALL_TASKS", MODE_PRIVATE)
         val workersInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
         val companyInMemory = getSharedPreferences("COMPANY", MODE_PRIVATE)
@@ -83,23 +82,9 @@ class ViewTasksActivity2 : AppCompatActivity() {
             )
         }
 
-//    //    Po kliknieciu przycisku zadanie zostaje uznane za zakonczone, usuwane z tabeli task, a dodawane do tabeli task_closed
-//        adapter.onBtnClick = { Task ->
-//            showTaskInBiggerWindow_delete(
-//                Task.getIdTask(),
-//                EndPoints.URL_ADD_TASKS_CLOSED,
-//                Task.getWorkerTask(),
-//                Task.getCompanyTask(),
-//                Task.getSubjectTask(),
-//                Task.getDateTask(),
-//                workersInMemory,
-//                companyInMemory
-//            )
-//        }
-
         adapter.onBtnMenuClick = { btn ->
-            val popupMenu: PopupMenu = PopupMenu(this,btn)
-            showTaskMenu(popupMenu)
+            val popupMenu = PopupMenu(this,btn)
+            showTaskMenu(popupMenu, adapter, workersInMemory, companyInMemory)
         }
 
 
@@ -139,20 +124,37 @@ class ViewTasksActivity2 : AppCompatActivity() {
         myDialog.show()
     }
 
-    private fun showTaskMenu(popupMenu: PopupMenu){
-        popupMenu.menuInflater.inflate(R.menu.popup_menu_task, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-            when(item.itemId) {
-                R.id.action_crick ->
-                    Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-                R.id.action_ftbal ->
-                    Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-                R.id.action_hockey ->
-                    Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
-            }
-            true
-        })
-        popupMenu.show()
+    private fun showTaskMenu(popupMenu: PopupMenu, adapter: CustomAdapter2, workersInMemory: SharedPreferences, companyInMemory: SharedPreferences){
+        adapter.onItemClick = { Task ->
+            popupMenu.menuInflater.inflate(R.menu.popup_menu_task, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.end_task -> {
+                        showTaskInBiggerWindow_delete(
+                            Task.getIdTask(),
+                            EndPoints.URL_ADD_TASKS_CLOSED,
+                            Task.getWorkerTask(),
+                            Task.getCompanyTask(),
+                            Task.getSubjectTask(),
+                            Task.getDateTask(),
+                            workersInMemory,
+                            companyInMemory
+                        )
+
+                        Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    R.id.edit_task ->
+                        Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT)
+                            .show()
+                    R.id.delete_task ->
+                        Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT)
+                            .show()
+                }
+                true
+            })
+            popupMenu.show()
+        }
     }
 
 
@@ -225,10 +227,12 @@ class ViewTasksActivity2 : AppCompatActivity() {
             { s ->
                 try {
                     val editor = tasksInMemory.edit()
+                    tasksInMemory.edit().clear().apply()
+                    println("ASDSAD: ${tasksInMemory.getInt("taskInMemorySize", 0)}")
                     val obj = JSONObject(s)
                     val array = obj.getJSONArray("result")
 
-                    editor.putInt("taskInMemorySize", array.length() - 1)
+                    editor.putInt("taskInMemorySize", array.length())
                     for (i in 0..array.length() - 1) {
                         val objectArtist = array.getJSONObject(i)
                         editor.putString("${i}_task_id","${objectArtist.getString("id")}")
@@ -257,7 +261,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
         return currentDate
     }
 
-    private fun showTaskInBiggerWindow_delete(id_task: String, url: String, worker: String, company: String, subejct: String, date: String, colorInMemory: SharedPreferences, companyInMemory: SharedPreferences){
+    private fun showTaskInBiggerWindow_delete(id_task: String, url: String, worker: String, company: String, subejct: String, date: String, workersInMemory: SharedPreferences, companyInMemory: SharedPreferences){
         val dialogBinding = this.layoutInflater.inflate(R.layout.activity_custom_dialog_delete, null)
         val myDialog = Dialog(this)
         myDialog.setContentView(dialogBinding)
@@ -285,18 +289,22 @@ class ViewTasksActivity2 : AppCompatActivity() {
         }
 
         yesBtn.setOnClickListener {
-            deleteAndAddToEnded(id_task,url,worker,company,subejct,date, colorInMemory, companyInMemory)
+            deleteAndAddToEnded(id_task,url,worker,company,subejct,date, workersInMemory, companyInMemory)
             myDialog.dismiss()
+
+            // odswiezenie strony
+            val intent = Intent(this, ViewTasksActivity2::class.java)
+            startActivity(intent)
 
         }
 
         myDialog.show()
     }
 
-    private fun deleteAndAddToEnded(task_id_: String, url: String, worker: String, company: String, sub: String, date_: String, colorInMemory: SharedPreferences, companyInMemory: SharedPreferences) {
+    private fun deleteAndAddToEnded(task_id_: String, url: String, worker: String, company: String, sub: String, date_: String, workersInMemory: SharedPreferences, companyInMemory: SharedPreferences) {
         val task_id = task_id_
-        val worker_id = colorInMemory.getString("${worker}_id", "ERRORDA").toString()
-        val company_id = colorInMemory.getString("${company}_id", "ERROR").toString()
+        val worker_id = workersInMemory.getString("${worker}_id", "ERROR").toString()
+        val company_id = companyInMemory.getString("${company}_id", "ERROR").toString()
         val subject = sub
         val date_add = date_
         val date_close = getDateTime()

@@ -1,12 +1,9 @@
 package com.example.adarp
 
-import android.app.Activity
-import android.content.Context
 import android.graphics.Color
-import android.view.*
-import android.view.GestureDetector.SimpleOnGestureListener
-import android.view.View.OnTouchListener
-import android.widget.Button
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -68,6 +65,7 @@ class CustomAdapter2(private val mList: List<Task>) : RecyclerView.Adapter<Custo
 
             btn_menu.setOnClickListener {
                 onBtnMenuClick?.invoke(btn_menu)
+                onItemClick?.invoke(mList[adapterPosition])
             }
 
         }

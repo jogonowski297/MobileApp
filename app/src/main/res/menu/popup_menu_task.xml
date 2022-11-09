@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_crick"
+        android:id="@+id/end_task"
         android:title="@string/end_task"
         android:icon="@drawable/menu"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_ftbal"
+        android:id="@+id/edit_task"
         android:title="@string/edit_task"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_hockey"
+        android:id="@+id/delete_task"
         android:title="@string/delete_task"
         app:showAsAction="never"/>
 </menu>

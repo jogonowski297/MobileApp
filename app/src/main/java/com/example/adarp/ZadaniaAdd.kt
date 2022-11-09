@@ -45,7 +45,7 @@ class ZadaniaAdd : AppCompatActivity() {
         val buttonaddart = findViewById<Button>(R.id.buttonAddArtist)
         buttonaddart.setOnClickListener {
             addArtist()
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, ViewTasksActivity2::class.java)
             startActivity(intent)
         }
 
