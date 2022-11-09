@@ -50,18 +50,18 @@ class TaskList(private val context: Activity, internal var tasks: List<Task>, va
                 val textViewCompany = listViewItem.findViewById(R.id.textViewCompany) as TextView
                 val textViewSubject = listViewItem.findViewById(R.id.textViewSubject) as TextView
                 val date = listViewItem.findViewById(R.id.textViewDate) as TextView
-                val btn_end = listViewItem.findViewById(R.id.btn_end) as Button
+//                val btn_end = listViewItem.findViewById(R.id.btn_end) as Button
 
-                btn_end.setOnClickListener {
-                        showTaskInBiggerWindow(
-                                idtask.text.toString(),
-                                EndPoints.URL_ADD_TASKS_CLOSED,
-                                textViewWorker.text.toString(),
-                                textViewCompany.text.toString(),
-                                textViewSubject.text.toString(),
-                                date.text.toString()
-                        )
-                }
+//                btn_end.setOnClickListener {
+//                        showTaskInBiggerWindow(
+//                                idtask.text.toString(),
+//                                EndPoints.URL_ADD_TASKS_CLOSED,
+//                                textViewWorker.text.toString(),
+//                                textViewCompany.text.toString(),
+//                                textViewSubject.text.toString(),
+//                                date.text.toString()
+//                        )
+//                }
 
                 val artist = tasks[position]
                 idtask.text = artist.id_task

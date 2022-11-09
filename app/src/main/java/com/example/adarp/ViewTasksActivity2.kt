@@ -2,9 +2,12 @@ package com.example.adarp
 
 import android.app.ActionBar
 import android.app.Dialog
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +32,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
         setContentView(R.layout.activity_view_tasks2)
         val tasksInMemory = getSharedPreferences("ALL_TASKS", MODE_PRIVATE)
         val workersInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
-        val companyInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
+        val companyInMemory = getSharedPreferences("COMPANY", MODE_PRIVATE)
 
         getTasks(tasksInMemory)
         getDataFromWorker(workersInMemory)
@@ -80,18 +83,36 @@ class ViewTasksActivity2 : AppCompatActivity() {
             )
         }
 
-    //    Po kliknieciu przycisku zadanie zostaje uznane za zakonczone, usuwane z tabeli task, a dodawane do tabeli task_closed
-        adapter.onBtnClick = { Task ->
-            showTaskInBiggerWindow_delete(
-                Task.getIdTask(),
-                EndPoints.URL_ADD_TASKS_CLOSED,
-                Task.getWorkerTask(),
-                Task.getCompanyTask(),
-                Task.getSubjectTask(),
-                Task.getDateTask(),
-                workersInMemory,
-                companyInMemory
-            )
+//    //    Po kliknieciu przycisku zadanie zostaje uznane za zakonczone, usuwane z tabeli task, a dodawane do tabeli task_closed
+//        adapter.onBtnClick = { Task ->
+//            showTaskInBiggerWindow_delete(
+//                Task.getIdTask(),
+//                EndPoints.URL_ADD_TASKS_CLOSED,
+//                Task.getWorkerTask(),
+//                Task.getCompanyTask(),
+//                Task.getSubjectTask(),
+//                Task.getDateTask(),
+//                workersInMemory,
+//                companyInMemory
+//            )
+//        }
+
+        adapter.onBtnMenuClick = { btn ->
+            val popupMenu: PopupMenu = PopupMenu(this,btn)
+            showTaskMenu(popupMenu)
+        }
+
+
+        val home_btn = findViewById<Button>(R.id.home_btn)
+        home_btn.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        val add_btn = findViewById<Button>(R.id.add_btn)
+        add_btn.setOnClickListener{
+            val intent = Intent(this, ZadaniaAdd::class.java)
+            startActivity(intent)
         }
 
     }
@@ -117,6 +138,23 @@ class ViewTasksActivity2 : AppCompatActivity() {
 
         myDialog.show()
     }
+
+    private fun showTaskMenu(popupMenu: PopupMenu){
+        popupMenu.menuInflater.inflate(R.menu.popup_menu_task, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+            when(item.itemId) {
+                R.id.action_crick ->
+                    Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+                R.id.action_ftbal ->
+                    Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+                R.id.action_hockey ->
+                    Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
+            }
+            true
+        })
+        popupMenu.show()
+    }
+
 
     private fun getDataFromWorker(sharedPreference: SharedPreferences) {
         val stringRequest = StringRequest(Request.Method.GET,

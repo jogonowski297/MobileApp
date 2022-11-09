@@ -12,11 +12,22 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="android:itemTextAppearance">@style/MenuTaskColor</item>
+        <item name="android:itemBackground">#BE1B6124</item>
     </style>
 
     <style name="HiddenTitleTheme" parent="Theme.mobileapp">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
+
+    <style name="MenuTaskColor" parent="Theme.mobileapp">
+        <item name="android:textColor">#F0F0F0</item>
+        <item name="android:textSize">20dp</item>
+
+    </style>
+
+
 
 </resources>

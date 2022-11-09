@@ -146,7 +146,9 @@ class ZadaniaAdd : AppCompatActivity() {
             }
         }
         //adding request to queue
+
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
+
 
     }
 

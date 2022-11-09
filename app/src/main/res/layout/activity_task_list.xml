@@ -14,7 +14,7 @@
 
 
 
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -24,7 +24,7 @@
     <LinearLayout
         android:id="@+id/one_task"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,44 +91,65 @@
 
         </LinearLayout>
 
+
         <LinearLayout
-            android:layout_width="100dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:gravity="right"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_end"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="@color/end"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btn_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="@color/edit"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                <ImageButton
+                    android:id="@+id/btn_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00333333"
+                    android:drawableBottom="@drawable/button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    card_view:srcCompat="@android:drawable/ic_dialog_dialer" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/btn_remove"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="@color/remove"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <!--            <Button-->
+<!--                android:id="@+id/btn_end"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:backgroundTint="@color/end"-->
+<!--                android:insetTop="0dp"-->
+<!--                android:insetBottom="0dp"-->
+<!--                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_edit"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:backgroundTint="@color/edit"-->
+<!--                android:insetTop="0dp"-->
+<!--                android:insetBottom="0dp"-->
+<!--                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_remove"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:backgroundTint="@color/remove"-->
+<!--                android:insetTop="0dp"-->
+<!--                android:insetBottom="0dp"-->
+<!--                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />-->
         </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>
 
 
 </androidx.cardview.widget.CardView>
