@@ -2,6 +2,7 @@ package com.example.adarp
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -9,6 +10,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
@@ -28,6 +30,9 @@ class ZadaniaAdd : AppCompatActivity() {
     private var spinnerWorker: Spinner? = null
     private var spinnerCompany: Spinner? = null
 
+    lateinit var workersInMemory: SharedPreferences
+    lateinit var companyInMemory: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +42,14 @@ class ZadaniaAdd : AppCompatActivity() {
         spinnerWorker = findViewById(R.id.spinnerWorker) as Spinner
         spinnerCompany= findViewById(R.id.spinnerCompany) as Spinner
 
-        downloadDataToSpinner(EndPoints.URL_GET_COMPANY,"result", "company", spinnerCompany!!)
-        downloadDataToSpinner(EndPoints.URL_GET_WORKERS,"result", "worker", spinnerWorker!!)
+        workersInMemory = getSharedPreferences("WORKER", MODE_PRIVATE)
+        companyInMemory = getSharedPreferences("COMPANY", MODE_PRIVATE)
+
+        downloadDataToSpinner(EndPoints.URL_GET_COMPANY,"result", "company", companyInMemory)
+        downloadDataToSpinner(EndPoints.URL_GET_WORKERS,"result", "worker", workersInMemory)
+
+        loadToSpinner(companyInMemory, spinnerCompany!!)
+        loadToSpinner(workersInMemory, spinnerWorker!!)
 
 
 
@@ -52,7 +63,7 @@ class ZadaniaAdd : AppCompatActivity() {
 
         val buttonviewart = findViewById<Button>(R.id.buttonViewArtist)
         buttonviewart.setOnClickListener {
-            val intent = Intent(this, ViewTasksActivity::class.java)
+            val intent = Intent(this, ViewTasksActivity2::class.java)
             startActivity(intent)
         }
 
@@ -70,7 +81,21 @@ class ZadaniaAdd : AppCompatActivity() {
         return currentDate
     }
 
-    private fun downloadDataToSpinner(url: String, arr_name: String, key: String, spi: Spinner) {
+    private fun loadToSpinner(somethingInMemory: SharedPreferences, spinner: Spinner){
+        val list: MutableList<Model> = ArrayList()
+        println("DLugosc spinnera: ${somethingInMemory.getInt("somethingInMemorySize", 0)}")
+        for(i in 1..somethingInMemory.getInt("somethingInMemorySize", 0)) {
+            val id = somethingInMemory.getInt("${i}_int", 0)
+            val name = somethingInMemory.getString("${i}_string", "ERROR").toString()
+            val m = Model(id, name)
+            list.add(m)
+        }
+        val adapter = CustomAdapter(this, list)
+        println("adapter: ${list}")
+        spinner.adapter = adapter
+    }
+
+    private fun downloadDataToSpinner(url: String, arr_name: String, key: String, somethingInMemory: SharedPreferences) {
         val pd = ProgressDialog(this)
         pd.setMessage("downloading...")
         pd.show()
@@ -78,21 +103,20 @@ class ZadaniaAdd : AppCompatActivity() {
         val request = StringRequest(Request.Method.GET, url,
             Response.Listener { response ->
                 pd.dismiss()
+                println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
+                val editor = somethingInMemory.edit()
                 val data = response.toString()
                 val jobj = JSONObject(data)
                 val jarray = jobj.getJSONArray(arr_name)
                 val list: MutableList<Model> = ArrayList()
+                editor.putInt("somethingInMemorySize", jarray.length())
+                println("Dlugoscdla fro: ${jarray.length()-1}")
                 for(i in 0..jarray.length()-1) {
                     val jobj2 = jarray.getJSONObject(i)
-                    val id = jobj2.getString("id")
-                    val name = jobj2.getString(key)
-                    val m = Model(id.toInt(),name)
-                    list.add(m)
+                    editor.putString("${jobj2.getString("id")}_string", jobj2.getString(key))
+                    editor.putInt("${jobj2.getString("id")}_int", jobj2.getString("id").toInt())
                 }
-                val adapter = CustomAdapter(this, list)
-                println("adapter: $adapter")
-                spi.adapter = adapter
-
+                editor.apply()
             },
             Response.ErrorListener { error ->
                 pd.dismiss()
@@ -103,11 +127,10 @@ class ZadaniaAdd : AppCompatActivity() {
     }
 
 
-
-    //adding a new record to database
     private fun addArtist() {
         //getting the record values
         val worker_id = spinnerWorker?.selectedItem.toString()
+        print("WORKER ID: ${worker_id}")
         val company_id = spinnerCompany?.selectedItem.toString()
         val subject = editTextArtistName?.text.toString()
         val date = getDateTime()
