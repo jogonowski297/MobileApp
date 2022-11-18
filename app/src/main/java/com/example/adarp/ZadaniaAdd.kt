@@ -10,7 +10,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
@@ -25,7 +24,6 @@ import java.util.*
 
 class ZadaniaAdd : AppCompatActivity() {
 
-    //edittext and spinner
     private var editTextArtistName: EditText? = null
     private var spinnerWorker: Spinner? = null
     private var spinnerCompany: Spinner? = null
@@ -56,7 +54,7 @@ class ZadaniaAdd : AppCompatActivity() {
         val buttonaddart = findViewById<Button>(R.id.buttonAddArtist)
         buttonaddart.setOnClickListener {
             addArtist()
-            val intent = Intent(this, ViewTasksActivity2::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
@@ -83,7 +81,7 @@ class ZadaniaAdd : AppCompatActivity() {
 
     private fun loadToSpinner(somethingInMemory: SharedPreferences, spinner: Spinner){
         val list: MutableList<Model> = ArrayList()
-        println("DLugosc spinnera: ${somethingInMemory.getInt("somethingInMemorySize", 0)}")
+        println("Dlugosc spinnera: ${somethingInMemory.getInt("somethingInMemorySize", 0)}")
         for(i in 1..somethingInMemory.getInt("somethingInMemorySize", 0)) {
             val id = somethingInMemory.getInt("${i}_int", 0)
             val name = somethingInMemory.getString("${i}_string", "ERROR").toString()
@@ -130,24 +128,19 @@ class ZadaniaAdd : AppCompatActivity() {
     private fun addArtist() {
         //getting the record values
         val worker_id = spinnerWorker?.selectedItem.toString()
-        print("WORKER ID: ${worker_id}")
         val company_id = spinnerCompany?.selectedItem.toString()
         val subject = editTextArtistName?.text.toString()
         val date = getDateTime()
-        println("11111111111")
 
         val stringRequest = object : StringRequest(
             Method.POST, EndPoints.URL_ADD_ARTIST,
             Response.Listener{ response ->
-                println("22222222")
                 try {
-                    println("333333333")
                     val obj = JSONObject(response)
                     Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_LONG)
                         .show()
                 } catch (e: JSONException) {
                     e.printStackTrace()
-                    println("cos:" + e.printStackTrace())
                 }
             },
             object : Response.ErrorListener {
@@ -158,13 +151,11 @@ class ZadaniaAdd : AppCompatActivity() {
             }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
-                println("44444444444")
                 val params = HashMap<String, String>()
                 params.put("worker_id", worker_id.slice(9..9))
                 params.put("company_id", company_id.slice(9..9))
                 params.put("subject", subject)
                 params.put("date_add", date)
-                println("params: $params")
                 return params
             }
         }

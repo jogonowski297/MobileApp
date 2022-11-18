@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONException
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -48,20 +50,25 @@ class MainActivity : AppCompatActivity() {
         val request = StringRequest(
             Request.Method.GET, EndPoints.URL_GET_TASKS,
             Response.Listener { response ->
-                val data = response.toString()
-                val jobj = JSONObject(data)
-                val jarray = jobj.getJSONArray("result")
-                val jarraylen = jarray.length()
-                btn.setText(jarraylen.toString())
-                if(jarraylen > 10) {
-                    btn.setTextColor(resources.getColor(R.color.full))
-//                    btn.setBackgroundColor(resources.getColor(R.color.full))
-                }
-                if(jarraylen in 7..10) {
-                    btn.setTextColor(resources.getColor(R.color.many))
-                }
-                if(jarraylen in 0..6) {
-                    btn.setTextColor(resources.getColor(R.color.little))
+                try {
+                    val data = response.toString()
+                    val jobj = JSONObject(data)
+                    val jarray = jobj.getJSONArray("result")
+                    val jarraylen = jarray.length()
+                    btn.setText(jarraylen.toString())
+                    if(jarraylen > 10) {
+                        btn.setTextColor(resources.getColor(R.color.full))
+    //                    btn.setBackgroundColor(resources.getColor(R.color.full))
+                    }
+                    if(jarraylen in 7..10) {
+                        btn.setTextColor(resources.getColor(R.color.many))
+                    }
+                    if(jarraylen in 0..6) {
+                        btn.setTextColor(resources.getColor(R.color.little))
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Nie udało się pobrać danych", Toast.LENGTH_LONG).show()
                 }
 
             },

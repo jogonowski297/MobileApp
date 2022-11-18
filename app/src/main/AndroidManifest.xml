@@ -18,13 +18,19 @@
         tools:ignore="MissingClass"
         tools:targetApi="31">
         <activity
-            android:name=".ViewTasksActivity2"
+            android:name=".EditTask"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <!-- android:label="@string/app_name"> -->
+        <activity
+            android:name=".ViewTasksActivity2"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity> <!-- android:label="@string/app_name"> -->
         <!-- <activity -->
         <!-- android:name=".CustomDialog" -->
         <!-- android:exported="false"> -->

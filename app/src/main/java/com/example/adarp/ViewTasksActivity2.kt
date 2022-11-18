@@ -1,14 +1,13 @@
 package com.example.adarp
 
 import android.app.ActionBar
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Button
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,24 +25,23 @@ import java.util.*
 
 class ViewTasksActivity2 : AppCompatActivity() {
 
-    lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var recyclerview: RecyclerView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerview: RecyclerView
 
-    lateinit var tasksInMemory: SharedPreferences
-    lateinit var workersInMemory: SharedPreferences
-    lateinit var companyInMemory: SharedPreferences
+    private var SP: MySharedPreference = MySharedPreference()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_tasks2)
 
-        tasksInMemory = getSharedPreferences("ALL_TASKS", MODE_PRIVATE)
-        workersInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
-        companyInMemory = getSharedPreferences("COMPANY", MODE_PRIVATE)
+
+        SP.tasksInMemory = getSharedPreferences("ALL_TASKS", MODE_PRIVATE)
+        SP.workersInMemory = getSharedPreferences("COLORS", MODE_PRIVATE)
+        SP.companyInMemory = getSharedPreferences("COMPANY", MODE_PRIVATE)
 
         getTasks()
-        getDataFromWorker(workersInMemory)
-        getDataFromCompany(companyInMemory)
+        getDataFromWorker(SP.workersInMemory)
+        getDataFromCompany(SP.companyInMemory)
 
 
 
@@ -54,23 +52,23 @@ class ViewTasksActivity2 : AppCompatActivity() {
         val data = ArrayList<Task>()
 
 
-        val result = workersInMemory.getString("workers", "XXX")
+        val result = SP.workersInMemory.getString("workers", "XXX")
         val list = Regex("\\w+")
             .findAll(result.toString())
             .toList()
             .map { it.value }   // zwraca [Kuba, Bartek, Krzysiek]
 
 
-        for (i in 0..tasksInMemory.getInt("taskInMemorySize", 0)) {
+        for (i in 0..SP.tasksInMemory.getInt("taskInMemorySize", 0)) {
             for(j in list){
-                if(tasksInMemory.getString("${i}_task_worker", "ERROR").toString() == j){
-                    val color = workersInMemory.getString("${j}_color", "#FF00C9")
+                if(SP.tasksInMemory.getString("${i}_task_worker", "ERROR").toString() == j){
+                    val color = SP.workersInMemory.getString("${j}_color", "#FF00C9")
                     data.add(Task(
-                        tasksInMemory.getString("${i}_task_id", "ERROR").toString(),
-                        tasksInMemory.getString("${i}_task_worker", "ERROR").toString(),
-                        tasksInMemory.getString("${i}_task_company", "ERROR").toString(),
-                        tasksInMemory.getString("${i}_task_subject", "ERROR").toString(),
-                        tasksInMemory.getString("${i}_task_date_add", "ERROR").toString(),
+                        SP.tasksInMemory.getString("${i}_task_id", "ERROR").toString(),
+                        SP.tasksInMemory.getString("${i}_task_worker", "ERROR").toString(),
+                        SP.tasksInMemory.getString("${i}_task_company", "ERROR").toString(),
+                        SP.tasksInMemory.getString("${i}_task_subject", "ERROR").toString(),
+                        SP.tasksInMemory.getString("${i}_task_date_add", "ERROR").toString(),
                         color.toString()
                     ))
                 }
@@ -111,7 +109,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
 
         adapter.onBtnMenuClick = { btn ->
             val popupMenu = PopupMenu(this,btn)
-            showTaskMenu(popupMenu, adapter, workersInMemory, companyInMemory)
+            showTaskMenu(popupMenu, adapter, SP.workersInMemory, SP.companyInMemory)
         }
 
 
@@ -215,9 +213,33 @@ class ViewTasksActivity2 : AppCompatActivity() {
                         Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT)
                             .show()
                     }
-                    R.id.edit_task ->
+                    R.id.edit_task -> {
+                        val v = LayoutInflater.from(this).inflate(R.layout.activity_edit_task, null)
+                        val subject: EditText = v.findViewById(R.id.editSubject)
+                        subject.setHint(Task.getSubjectTask())
+                        val spinnerWorkers: Spinner = v.findViewById(R.id.edit_task_spinnerWorker)
+                        val spinnerCompany: Spinner = v.findViewById(R.id.edit_task_spinnerCompany)
+
+                        loadToSpinner(workersInMemory,spinnerWorkers, "worker")
+                        loadToSpinner(companyInMemory,spinnerCompany, "company")
+
+                        AlertDialog.Builder(this)
+                            .setView(v)
+                            .setPositiveButton("Ok"){
+                                dialog,_->
+                                editTask(Task.getIdTask(), Task.getWorkerTask(),Task.getCompanyTask(),Task.getSubjectTask())
+                                Toast.makeText(this, "Zmienione", Toast.LENGTH_LONG).show()
+                            }
+
+                            .setNegativeButton("Wyjdź"){
+                                dialog,_->
+                                Toast.makeText(this, "exit", Toast.LENGTH_LONG).show()
+                            }
+                            .create().show()
+
                         Toast.makeText(this, "You Clicked : " + item.title, Toast.LENGTH_SHORT)
                             .show()
+                    }
                     R.id.delete_task -> {
                         showTaskInBiggerWindow_delete(
                             Task.getIdTask(),
@@ -239,6 +261,22 @@ class ViewTasksActivity2 : AppCompatActivity() {
         }
     }
 
+    private fun loadToSpinner(somethingInMemory: SharedPreferences, spinner: Spinner, nazwa: String) {
+        val list: MutableList<Model> = ArrayList()
+
+        for (i in 1..somethingInMemory.getInt("somethingInMemorySize", 0)) {
+            val id = somethingInMemory.getInt("${i}_id", 0)
+            val name = somethingInMemory.getString("${i}_${nazwa}", "ERROR").toString()
+            println("${nazwa}_id")
+            println("id_${nazwa}")
+            val m = Model(id, name)
+            list.add(m)
+        }
+        val adapter = CustomAdapter(this, list)
+        println("adapter: ${list}")
+        spinner.adapter = adapter
+    }
+
 
     private fun getDataFromWorker(sharedPreference: SharedPreferences) {
         val stringRequest = StringRequest(Request.Method.GET,
@@ -249,13 +287,14 @@ class ViewTasksActivity2 : AppCompatActivity() {
                     val obj = JSONObject(s)
                     val array = obj.getJSONArray("result")
                     val workersList: MutableList<String> = mutableListOf()
-
+                    editor.putInt("somethingInMemorySize", array.length())
                     for (i in 0..array.length() - 1) {
                         val objectArtist = array.getJSONObject(i)
                         editor.putString("${objectArtist.getString("worker")}_color","${objectArtist.getString("color")}")
-                        editor.putString("${objectArtist.getString("worker")}_id","${objectArtist.getString("id")}")
+                        editor.putInt("${objectArtist.getString("worker")}_id", objectArtist.getInt("id"))
+                        editor.putString("${objectArtist.getString("id")}_worker","${objectArtist.getString("worker")}")
+                        editor.putInt("${objectArtist.getString("id")}_id", objectArtist.getInt("id"))
                         workersList.add(objectArtist.getString("worker"))
-
                     }
 
                     editor.putString("workers", workersList.toString())
@@ -280,11 +319,12 @@ class ViewTasksActivity2 : AppCompatActivity() {
                     val obj = JSONObject(s)
                     val array = obj.getJSONArray("result")
                     val workersList: MutableList<String> = mutableListOf()
-
+                    editor.putInt("somethingInMemorySize", array.length())
                     for (i in 0..array.length() - 1) {
                         val objectArtist = array.getJSONObject(i)
-                        editor.putString("${objectArtist.getString("company")}_id","${objectArtist.getString("id")}")
+                        editor.putInt("${objectArtist.getString("company")}_id", objectArtist.getInt("id"))
                         editor.putString("${objectArtist.getString("id")}_company","${objectArtist.getString("company")}")
+                        editor.putInt("${objectArtist.getString("id")}_id", objectArtist.getInt("id"))
                         workersList.add(objectArtist.getString("company"))
 
                     }
@@ -308,8 +348,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
             EndPoints.URL_GET_TASKS,
             { s ->
                 try {
-                    val editor = tasksInMemory.edit()
-                    tasksInMemory.edit().clear().apply()
+                    val editor = SP.tasksInMemory.edit()
+                    SP.tasksInMemory.edit().clear().apply()
                     val obj = JSONObject(s)
                     val array = obj.getJSONArray("result")
 
@@ -367,6 +407,44 @@ class ViewTasksActivity2 : AppCompatActivity() {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
                 params.put("task_id", task_id)
+                return params
+            }
+        }
+
+        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+    }
+
+    private fun editTask(task_id: String, worker: String, company: String, subejct: String){
+
+        val worker_id = SP.workersInMemory.getInt("${worker}_id", 0)
+        val company_id = SP.companyInMemory.getInt("${company}_id", 0)
+
+        val stringRequest = object : StringRequest(
+            Method.POST, EndPoints.URL_EDIT_TASK,
+            Response.Listener { response ->
+                try {
+                    val obj = JSONObject(response)
+                    Toast.makeText(this@ViewTasksActivity2, obj.getString("message"), Toast.LENGTH_LONG).show()
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    Toast.makeText(this@ViewTasksActivity2, "2", Toast.LENGTH_LONG).show()
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(volleyError: VolleyError) {
+                    Toast.makeText(this@ViewTasksActivity2, volleyError.message, Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        ) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params.put("task_id", task_id)
+                params.put("worker_id", "$worker_id")
+                params.put("company_id", "$company_id")
+                params.put("subject", subejct)
                 return params
             }
         }

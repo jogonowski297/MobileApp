@@ -10,6 +10,7 @@ object EndPoints {
     val URL_GET_WORKERS = "https://adarp.pl/app/spinner/workersSpinner.php"
     val URL_GET_TASKS = "https://adarp.pl/app/listView/tasksView.php"
     val URL_DEL_TASK = "https://adarp.pl/app/postSomething/removeTask.php"
+    val URL_EDIT_TASK = "https://adarp.pl/app/postSomething/editTask.php"
     //    val URL_GET_TASKS = "https://crm.adarp.eu/crm_mobile/app/listView/tasksView.php"
     val URL_GET_COPIES = "https://adarp.pl/app/listView/copiesView.php"
 
