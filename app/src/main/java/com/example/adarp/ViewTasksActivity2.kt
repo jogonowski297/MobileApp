@@ -227,7 +227,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
                             .setView(v)
                             .setPositiveButton("Ok"){
                                 dialog,_->
-                                editTask(Task.getIdTask(), Task.getWorkerTask(),Task.getCompanyTask(),Task.getSubjectTask())
+                                editTask(Task.getIdTask(), Task.getWorkerTask(),Task.getCompanyTask(),subject.text.toString())
                                 Toast.makeText(this, "Zmienione", Toast.LENGTH_LONG).show()
                             }
 
