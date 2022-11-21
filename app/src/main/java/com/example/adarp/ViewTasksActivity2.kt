@@ -216,7 +216,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
                     R.id.edit_task -> {
                         val v = LayoutInflater.from(this).inflate(R.layout.activity_edit_task, null)
                         val subject: EditText = v.findViewById(R.id.editSubject)
-                        subject.setHint(Task.getSubjectTask())
+//                        subject.setHint(Task.getSubjectTask())
+                        subject.setText(Task.getSubjectTask())
                         val spinnerWorkers: Spinner = v.findViewById(R.id.edit_task_spinnerWorker)
                         val spinnerCompany: Spinner = v.findViewById(R.id.edit_task_spinnerCompany)
 
@@ -227,7 +228,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
                             .setView(v)
                             .setPositiveButton("Ok"){
                                 dialog,_->
-                                editTask(Task.getIdTask(), Task.getWorkerTask(),Task.getCompanyTask(),subject.text.toString())
+                                editTask(Task.getIdTask(), spinnerWorkers.selectedItemPosition.toString(), spinnerCompany.selectedItemPosition.toString(), subject.text.toString())
                                 Toast.makeText(this, "Zmienione", Toast.LENGTH_LONG).show()
                             }
 
@@ -267,8 +268,6 @@ class ViewTasksActivity2 : AppCompatActivity() {
         for (i in 1..somethingInMemory.getInt("somethingInMemorySize", 0)) {
             val id = somethingInMemory.getInt("${i}_id", 0)
             val name = somethingInMemory.getString("${i}_${nazwa}", "ERROR").toString()
-            println("${nazwa}_id")
-            println("id_${nazwa}")
             val m = Model(id, name)
             list.add(m)
         }
@@ -416,8 +415,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
 
     private fun editTask(task_id: String, worker: String, company: String, subejct: String){
 
-        val worker_id = SP.workersInMemory.getInt("${worker}_id", 0)
-        val company_id = SP.companyInMemory.getInt("${company}_id", 0)
+//        val worker_id = SP.workersInMemory.getInt("${worker}_id", 0)
+//        val company_id = SP.companyInMemory.getInt("${company}_id", 0)
 
         val stringRequest = object : StringRequest(
             Method.POST, EndPoints.URL_EDIT_TASK,
@@ -442,8 +441,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
                 params.put("task_id", task_id)
-                params.put("worker_id", "$worker_id")
-                params.put("company_id", "$company_id")
+                params.put("worker_id", "${worker.toInt()+1}")
+                params.put("company_id", "${company.toInt()+1}")
                 params.put("subject", subejct)
                 return params
             }
