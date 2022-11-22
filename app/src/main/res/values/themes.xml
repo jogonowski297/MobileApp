@@ -28,6 +28,12 @@
 
     </style>
 
+    <style name="dialoganimation" >
+        <item name="android:background">@color/black</item>
+        <item name="android:windowEnterAnimation">@anim/slideup</item>
+        <item name="android:windowExitAnimation">@anim/slidedown</item>
+    </style>
+
 
 
 </resources>
