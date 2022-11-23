@@ -97,7 +97,6 @@ class ViewTasksActivity2 : AppCompatActivity() {
         }
 
 
-
     //    Po kliknieciu na zadanie zostaje wyswielone w większym oknie dla lepszego widoku
         recyclerview.layoutManager = LinearLayoutManager(this)
         adapter.onItemClick = { Task ->
@@ -116,16 +115,10 @@ class ViewTasksActivity2 : AppCompatActivity() {
         }
 
 
-        val home_btn = findViewById<Button>(R.id.home_btn)
-        home_btn.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-
-        val add_btn = findViewById<Button>(R.id.add_btn)
-        add_btn.setOnClickListener{
-            val intent = Intent(this, ZadaniaAdd::class.java)
-            startActivity(intent)
+        val menu = findViewById<Button>(R.id.menu_btn)
+        menu.setOnClickListener{
+            val popupMenu = PopupMenu(this, menu)
+            showMenu(popupMenu)
         }
 
     }
@@ -267,6 +260,32 @@ class ViewTasksActivity2 : AppCompatActivity() {
             })
             popupMenu.show()
         }
+    }
+
+    private fun showMenu(popupMenu: PopupMenu){
+        popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.add_task -> {
+                    val intent = Intent(this, ZadaniaAdd::class.java)
+                    startActivity(intent)
+
+                }
+                R.id.home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+
+                }
+                R.id.closed_task -> {
+                    val intent = Intent(this, ViewClosedTasksActivity::class.java)
+                    startActivity(intent)
+
+                }
+            }
+            true
+        })
+        popupMenu.show()
+
     }
 
     private fun loadToSpinner(somethingInMemory: SharedPreferences, spinner: Spinner, nazwa: String, firstPosition: String = "") {

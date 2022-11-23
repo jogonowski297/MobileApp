@@ -9,44 +9,49 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/container"
+        android:id="@+id/container_closedTask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingBottom="60dp"
         tools:context=".ViewTasksActivity2">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleView"
+            android:id="@+id/recycleView_closedTask"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <RelativeLayout
-    android:id="@+id/buttonsLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentBottom="true"
-    android:layout_gravity="center"
-    android:layout_marginStart="41dp"
-    android:layout_marginEnd="40dp"
-    android:layout_marginBottom="18dp"
-    android:gravity="center"
-    android:orientation="horizontal"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent">
+        android:id="@+id/buttonsLayout_closedTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="41dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="18dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/menu_btn"
+            android:id="@+id/home_btn_closedTask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="186dp"
             android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/button"
-            android:text="Menu"
+            android:text="HOME"
             android:textColor="@color/white" />
 
     </RelativeLayout>

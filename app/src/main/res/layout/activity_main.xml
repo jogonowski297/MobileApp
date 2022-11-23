@@ -13,6 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="362dp"
+            android:layout_height="119dp"
+            android:layout_marginTop="52dp"
+            android:shadowColor="#0F3E0F"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:text="@string/main_name"
+            android:textColor="#038A03"
+            android:textSize="60sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="377dp"
@@ -56,22 +73,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="362dp"
-            android:layout_height="119dp"
-            android:layout_marginTop="52dp"
-            android:shadowColor="#0F3E0F"
-            android:shadowDx="1.5"
-            android:shadowDy="1.3"
-            android:shadowRadius="1.6"
-            android:text="@string/main_name"
-            android:textColor="#038A03"
-            android:textSize="60sp"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/closed_tasks_btn"
+            android:layout_width="339dp"
+            android:layout_height="92dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/button"
+            android:text="Zamkniete Zadania"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/kopia_btn" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

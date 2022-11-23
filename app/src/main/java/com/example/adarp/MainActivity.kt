@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         val zadania_btn = findViewById<Button>(R.id.zadania_btn)
         val zadania_list_btn = findViewById<Button>(R.id.zadania_list_btn)
         val kopia_btn = findViewById<Button>(R.id.kopia_btn)
+        val closed_tasks_btn = findViewById<Button>(R.id.closed_tasks_btn)
 
         setNumOfTask(zadania_list_btn)
 
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         kopia_btn.setOnClickListener{
             val Intent = Intent(this, ViewCopiesActivity::class.java)
+            startActivity(Intent)
+        }
+
+        closed_tasks_btn.setOnClickListener{
+            val Intent = Intent(this, ViewClosedTasksActivity::class.java)
             startActivity(Intent)
         }
 

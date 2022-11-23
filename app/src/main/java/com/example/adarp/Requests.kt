@@ -15,6 +15,14 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
 
+
+//
+//
+//  DO USUNIECIA
+//
+//
+
+
 @Suppress("DEPRECATION")
 class Requests : AppCompatActivity()  {
     val sharedPreference =  PreferenceManager.getDefaultSharedPreferences(this)

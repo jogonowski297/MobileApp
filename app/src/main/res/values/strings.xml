@@ -3,8 +3,16 @@
     <string name="company">Company</string>
     <string name="main_name">MobileApp</string>
 
+<!--    Menu Task-->
     <string name="end_task">Zakończ</string>
     <string name="edit_task">Edytuj</string>
     <string name="delete_task">Usuń</string>
+<!--     END Menu Task-->
+
+<!--    Menu-->
+    <string name="home">Powrót</string>
+    <string name="add_task">Dodaj</string>
+    <string name="closed_task">Zamnięte zadania</string>
+<!--    END Menu-->
 
 </resources>
