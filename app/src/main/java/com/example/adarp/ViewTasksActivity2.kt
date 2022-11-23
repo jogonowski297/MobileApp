@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class ViewTasksActivity2 : AppCompatActivity() {
 
@@ -137,10 +140,10 @@ class ViewTasksActivity2 : AppCompatActivity() {
         dialogBinding.findViewById<TextView>(R.id.workerTask).text = "${worker}"
         dialogBinding.findViewById<TextView>(R.id.companyTask).text = "${company}"
         dialogBinding.findViewById<TextView>(R.id.subjectTask).text = "${subejct}"
-        myDialog.setCancelable(true)
-        myDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner_task)
+//        myDialog.setCancelable(true)
+        val animSlideUp: Animation = AnimationUtils.loadAnimation(applicationContext, R.anim.slideup)
+        myDialog.window!!.attributes
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
-        println("width: ${width}")
         if(width <= 1200)
             myDialog.window?.setLayout(width, ActionBar.LayoutParams.WRAP_CONTENT)
         else
@@ -216,18 +219,23 @@ class ViewTasksActivity2 : AppCompatActivity() {
                     R.id.edit_task -> {
                         val v = LayoutInflater.from(this).inflate(R.layout.activity_edit_task, null)
                         val subject: EditText = v.findViewById(R.id.editSubject)
-                        subject.setHint(Task.getSubjectTask())
-                        val spinnerWorkers: Spinner = v.findViewById(R.id.edit_task_spinnerWorker)
-                        val spinnerCompany: Spinner = v.findViewById(R.id.edit_task_spinnerCompany)
+                        subject.setText(Task.getSubjectTask())
+                        val ETspinnerWorkers: Spinner = v.findViewById(R.id.edit_task_spinnerWorker)
+                        val ETspinnerCompany: Spinner = v.findViewById(R.id.edit_task_spinnerCompany)
 
-                        loadToSpinner(workersInMemory,spinnerWorkers, "worker")
-                        loadToSpinner(companyInMemory,spinnerCompany, "company")
+
+
+                        loadToSpinner(workersInMemory, ETspinnerWorkers, "worker", Task.getWorkerTask())
+                        loadToSpinner(companyInMemory, ETspinnerCompany, "company", Task.getCompanyTask())
 
                         AlertDialog.Builder(this)
                             .setView(v)
                             .setPositiveButton("Ok"){
                                 dialog,_->
-                                editTask(Task.getIdTask(), Task.getWorkerTask(),Task.getCompanyTask(),subject.text.toString())
+                                val worker_name: Model = ETspinnerWorkers.selectedItem as Model
+                                val company_name: Model = ETspinnerCompany.selectedItem as Model
+
+                                editTask(Task.getIdTask(), worker_name.name, company_name.name, subject.text.toString())
                                 Toast.makeText(this, "Zmienione", Toast.LENGTH_LONG).show()
                             }
 
@@ -261,17 +269,17 @@ class ViewTasksActivity2 : AppCompatActivity() {
         }
     }
 
-    private fun loadToSpinner(somethingInMemory: SharedPreferences, spinner: Spinner, nazwa: String) {
-        val list: MutableList<Model> = ArrayList()
+    private fun loadToSpinner(somethingInMemory: SharedPreferences, spinner: Spinner, nazwa: String, firstPosition: String = "") {
+        val list: ArrayList<Model> = ArrayList()
 
         for (i in 1..somethingInMemory.getInt("somethingInMemorySize", 0)) {
-            val id = somethingInMemory.getInt("${i}_id", 0)
+            val id = somethingInMemory.getInt("${i}_id", 999)
             val name = somethingInMemory.getString("${i}_${nazwa}", "ERROR").toString()
-            println("${nazwa}_id")
-            println("id_${nazwa}")
             val m = Model(id, name)
             list.add(m)
         }
+        list.sortBy { model: Model -> model.name }
+        list.add(0, Model(0, firstPosition))
         val adapter = CustomAdapter(this, list)
         println("adapter: ${list}")
         spinner.adapter = adapter
@@ -356,11 +364,23 @@ class ViewTasksActivity2 : AppCompatActivity() {
                     editor.putInt("taskInMemorySize", array.length())
                     for (i in 0..array.length() - 1) {
                         val objectArtist = array.getJSONObject(i)
-                        editor.putString("${i}_task_id","${objectArtist.getString("id")}")
-                        editor.putString("${i}_task_worker","${objectArtist.getString("worker")}")
-                        editor.putString("${i}_task_company","${objectArtist.getString("company")}")
-                        editor.putString("${i}_task_subject","${objectArtist.getString("subject")}")
-                        editor.putString("${i}_task_date_add","${objectArtist.getString("date_add")}")
+                        editor.putString("${i}_task_id", "${objectArtist.getString("id")}")
+                        editor.putString(
+                            "${i}_task_worker",
+                            "${objectArtist.getString("worker")}"
+                        )
+                        editor.putString(
+                            "${i}_task_company",
+                            "${objectArtist.getString("company")}"
+                        )
+                        editor.putString(
+                            "${i}_task_subject",
+                            "${objectArtist.getString("subject")}"
+                        )
+                        editor.putString(
+                            "${i}_task_date_add",
+                            "${objectArtist.getString("date_add")}"
+                        )
                     }
                     editor.apply()
 
@@ -368,11 +388,14 @@ class ViewTasksActivity2 : AppCompatActivity() {
                     e.printStackTrace()
                 }
             },
-            { volleyError -> Toast.makeText(this, volleyError.message, Toast.LENGTH_LONG).show() })
+            { volleyError ->
+                Toast.makeText(this, volleyError.message, Toast.LENGTH_LONG).show()
+            })
 
         val requestQueue = Volley.newRequestQueue(this)
         requestQueue.add(stringRequest)
     }
+
 
 
 
@@ -455,8 +478,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
 
     private fun deleteAndAddToEnded(task_id_: String, url: String, worker: String, company: String, sub: String, date_: String, workersInMemory: SharedPreferences, companyInMemory: SharedPreferences) {
         val task_id = task_id_
-        val worker_id = workersInMemory.getString("${worker}_id", "ERROR").toString()
-        val company_id = companyInMemory.getString("${company}_id", "ERROR").toString()
+        val worker_id = workersInMemory.getInt("${worker}_id", 0)
+        val company_id = companyInMemory.getInt("${company}_id", 0)
         val subject = sub
         val date_add = date_
         val date_close = getDateTime()
@@ -483,8 +506,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
                 params.put("task_id", task_id)
-                params.put("worker_id", worker_id)
-                params.put("company_id", company_id)
+                params.put("worker_id", "$worker_id")
+                params.put("company_id", "$company_id")
                 params.put("subject", subject)
                 params.put("date_add", date_add)
                 params.put("date_close", date_close)

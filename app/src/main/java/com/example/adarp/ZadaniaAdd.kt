@@ -80,7 +80,7 @@ class ZadaniaAdd : AppCompatActivity() {
     }
 
     private fun loadToSpinner(somethingInMemory: SharedPreferences, spinner: Spinner){
-        val list: MutableList<Model> = ArrayList()
+        val list: ArrayList<Model> = ArrayList()
         println("Dlugosc spinnera: ${somethingInMemory.getInt("somethingInMemorySize", 0)}")
         for(i in 1..somethingInMemory.getInt("somethingInMemorySize", 0)) {
             val id = somethingInMemory.getInt("${i}_int", 0)
@@ -88,6 +88,7 @@ class ZadaniaAdd : AppCompatActivity() {
             val m = Model(id, name)
             list.add(m)
         }
+        list.sortBy { model: Model -> model.name }
         val adapter = CustomAdapter(this, list)
         println("adapter: ${list}")
         spinner.adapter = adapter
@@ -101,16 +102,15 @@ class ZadaniaAdd : AppCompatActivity() {
         val request = StringRequest(Request.Method.GET, url,
             Response.Listener { response ->
                 pd.dismiss()
-                println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
                 val editor = somethingInMemory.edit()
                 val data = response.toString()
                 val jobj = JSONObject(data)
                 val jarray = jobj.getJSONArray(arr_name)
                 val list: MutableList<Model> = ArrayList()
                 editor.putInt("somethingInMemorySize", jarray.length())
-                println("Dlugoscdla fro: ${jarray.length()-1}")
                 for(i in 0..jarray.length()-1) {
                     val jobj2 = jarray.getJSONObject(i)
+                    println("posortowane: ${jobj2.getString(key)}")
                     editor.putString("${jobj2.getString("id")}_string", jobj2.getString(key))
                     editor.putInt("${jobj2.getString("id")}_int", jobj2.getString("id").toInt())
                 }
