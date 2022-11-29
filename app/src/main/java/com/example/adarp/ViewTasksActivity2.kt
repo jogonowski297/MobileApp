@@ -115,11 +115,12 @@ class ViewTasksActivity2 : AppCompatActivity() {
         }
 
 
-        val menu = findViewById<Button>(R.id.menu_btn)
-        menu.setOnClickListener{
-            val popupMenu = PopupMenu(this, menu)
-            showMenu(popupMenu)
+        val btn_back = findViewById<Button>(R.id.btn_back)
+        btn_back.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
+
 
     }
 
