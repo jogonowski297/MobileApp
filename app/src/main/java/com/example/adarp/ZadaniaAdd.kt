@@ -59,12 +59,6 @@ class ZadaniaAdd : AppCompatActivity() {
         }
 
 
-        val buttonviewart = findViewById<Button>(R.id.buttonViewArtist)
-        buttonviewart.setOnClickListener {
-            val intent = Intent(this, ViewTasksActivity2::class.java)
-            startActivity(intent)
-        }
-
         val return_btn = findViewById<Button>(R.id.add_btn)
         return_btn.setOnClickListener {
             val Intent = Intent(this, MainActivity::class.java)

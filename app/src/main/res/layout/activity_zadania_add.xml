@@ -64,17 +64,6 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayoutadd"
             tools:ignore="MissingConstraints" />
 
-        <Button
-            android:id="@+id/buttonViewArtist"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="24dp"
-            android:text="Wyświetl zadania"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAddArtist" />
-
 
         <EditText
             android:id="@+id/editTextArtistName"
