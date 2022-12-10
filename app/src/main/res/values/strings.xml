@@ -15,4 +15,7 @@
     <string name="closed_task">Zamnięte zadania</string>
 <!--    END Menu-->
 
+<!--    Task Dialog-->
+    <string name="dialog_task_description">Treść zadania</string>
+<!--    END TaskDialog-->
 </resources>

@@ -1,16 +1,25 @@
 package com.example.adarp
 
+import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -105,7 +114,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
                 Task.getWorkerTask(),
                 Task.getCompanyTask(),
                 Task.getSubjectTask(),
-                Task.getDateTask()
+                Task.getDateTask(),
+                Task.getTaskColor()
             )
         }
 
@@ -125,7 +135,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
     }
 
 
-    private fun showTaskInBiggerWindow(id_task: String, worker: String, company: String, subejct: String, date: String){
+    private fun showTaskInBiggerWindow(id_task: String, worker: String, company: String, subejct: String, date: String, color: String){
         val dialogBinding = layoutInflater.inflate(R.layout.activity_custom_dialog_task, null)
         val myDialog = Dialog(this)
         myDialog.setContentView(dialogBinding)
@@ -134,9 +144,17 @@ class ViewTasksActivity2 : AppCompatActivity() {
         dialogBinding.findViewById<TextView>(R.id.workerTask).text = "${worker}"
         dialogBinding.findViewById<TextView>(R.id.companyTask).text = "${company}"
         dialogBinding.findViewById<TextView>(R.id.subjectTask).text = "${subejct}"
+        val backgorud: ConstraintLayout = dialogBinding.findViewById(R.id.round_corner_task_layout)
 //        myDialog.setCancelable(true)
-        val animSlideUp: Animation = AnimationUtils.loadAnimation(applicationContext, R.anim.slideup)
+        myDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner_task)
         myDialog.window!!.attributes
+
+
+        val dravable: GradientDrawable = (backgorud.background as GradientDrawable?)!!
+        dravable.setStroke(30, Color.parseColor(color))
+
+
+
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         if(width <= 1200)
             myDialog.window?.setLayout(width, ActionBar.LayoutParams.WRAP_CONTENT)
