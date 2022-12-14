@@ -62,7 +62,7 @@ class ViewClosedTasksActivity : AppCompatActivity() {
                         SP.closedTasksInMemory.getString("${i}_task_worker", "ERROR").toString(),
                         SP.closedTasksInMemory.getString("${i}_task_company", "ERROR").toString(),
                         SP.closedTasksInMemory.getString("${i}_task_subject", "ERROR").toString(),
-                        SP.closedTasksInMemory.getString("${i}_task_date_add", "ERROR").toString(),
+                        SP.closedTasksInMemory.getString("${i}_closed_task_date_add", "ERROR").toString(),
                         color.toString()
                     ))
                 }
