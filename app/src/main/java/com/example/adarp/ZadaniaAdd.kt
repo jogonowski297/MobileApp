@@ -56,6 +56,7 @@ class ZadaniaAdd : AppCompatActivity() {
             addArtist()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+
         }
 
 
@@ -67,7 +68,7 @@ class ZadaniaAdd : AppCompatActivity() {
     }
 
     private fun getDateTime(): String {
-        val sdf = SimpleDateFormat("yyyy/M/dd hh:mm:ss")
+        val sdf = SimpleDateFormat("yyyy/M/dd HH:mm:ss")
         val currentDate = sdf.format(Date())
         println("DATE: $currentDate")
         return currentDate
