@@ -149,11 +149,8 @@ class ViewTasksActivity2 : AppCompatActivity() {
         myDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner_task)
         myDialog.window!!.attributes
 
-
         val dravable: GradientDrawable = (backgorud.background as GradientDrawable?)!!
         dravable.setStroke(30, Color.parseColor(color))
-
-
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         if(width <= 1200)
@@ -438,7 +435,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
 
 
     private fun getDateTime(): String {
-        val sdf = SimpleDateFormat("yyyy/M/dd hh:mm:ss")
+        val sdf = SimpleDateFormat("yyyy/M/dd HH:mm:ss")
         val currentDate = sdf.format(Date())
         return currentDate
     }
