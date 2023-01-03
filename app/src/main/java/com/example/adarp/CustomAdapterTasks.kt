@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class CustomAdapter2(private val mList: List<Task>) : RecyclerView.Adapter<CustomAdapter2.ViewHolder>() {
+class CustomAdapterTasks(private val mList: List<Task>) : RecyclerView.Adapter<CustomAdapterTasks.ViewHolder>() {
 
     var onItemClick: ((Task) -> Unit)? = null
     var onBtnClick: ((Task) -> Unit)? = null

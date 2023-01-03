@@ -7,4 +7,5 @@ class MySharedPreference {
     lateinit var closedTasksInMemory: SharedPreferences
     lateinit var workersInMemory: SharedPreferences
     lateinit var companyInMemory: SharedPreferences
+    lateinit var copiesInMemory: SharedPreferences
 }

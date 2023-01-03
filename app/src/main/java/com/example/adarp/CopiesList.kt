@@ -22,7 +22,7 @@ class CopiesList(private val context: Activity, internal var copies: List<Copies
 
 
         val artist = copies[position]
-        idcopies.text = artist.id_copies
+        idcopies.text = artist.id_copies.toString()
         textViewNazwa.text = artist.nazwa
         textViewRozmiar.text = artist.rozmiar
         textViewData.text = artist.data_

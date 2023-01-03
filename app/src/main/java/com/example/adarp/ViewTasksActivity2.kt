@@ -1,25 +1,17 @@
 package com.example.adarp
 
-import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -88,7 +80,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
 
         }
 
-        val adapter = CustomAdapter2(data)
+        val adapter = CustomAdapterTasks(data)
         recyclerview.adapter = adapter
 
 
@@ -123,6 +115,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
             val popupMenu = PopupMenu(this,btn)
             showTaskMenu(popupMenu, adapter, SP.workersInMemory, SP.companyInMemory)
         }
+
 
 
         val btn_back = findViewById<Button>(R.id.btn_back)
@@ -204,7 +197,7 @@ class ViewTasksActivity2 : AppCompatActivity() {
         myDialog.show()
     }
 
-    private fun showTaskMenu(popupMenu: PopupMenu, adapter: CustomAdapter2, workersInMemory: SharedPreferences, companyInMemory: SharedPreferences){
+    private fun showTaskMenu(popupMenu: PopupMenu, adapter: CustomAdapterTasks, workersInMemory: SharedPreferences, companyInMemory: SharedPreferences){
         adapter.onItemClick = { Task ->
             popupMenu.menuInflater.inflate(R.menu.popup_menu_task, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
