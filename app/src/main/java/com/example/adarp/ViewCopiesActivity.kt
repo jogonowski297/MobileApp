@@ -42,7 +42,7 @@ class ViewCopiesActivity : AppCompatActivity() {
         recyclerview.layoutManager = LinearLayoutManager(this)
         val data = ArrayList<Copies>()
 
-        for (i in 1..SP.copiesInMemory.getInt("somethingInMemorySize", 0)) {
+        for (i in 0..SP.copiesInMemory.getInt("somethingInMemorySize", 0)-1) {
             var color = "#11B600"
             if (SP.copiesInMemory.getString("${i}_kopia", "FALSE").toString() == "FALSE") {
                 color = "#D80000"
@@ -92,11 +92,11 @@ class ViewCopiesActivity : AppCompatActivity() {
                     editor.putInt("somethingInMemorySize", array.length())
                     for (i in 0..array.length() - 1) {
                         val objectArtist = array.getJSONObject(i)
-                        editor.putInt("${objectArtist.getString("id")}_id", objectArtist.getInt("id"))
-                        editor.putString("${objectArtist.getString("id")}_nazwa", objectArtist.getString("nazwa"))
-                        editor.putString("${objectArtist.getString("id")}_rozmiar","${objectArtist.getString("rozmiar")}")
-                        editor.putString("${objectArtist.getString("id")}_data_", "${objectArtist.getString("data_")}")
-                        editor.putString("${objectArtist.getString("id")}_kopia", objectArtist.getString("kopia"))
+                        editor.putInt("${i}_id", objectArtist.getInt("id"))
+                        editor.putString("${i}_nazwa", objectArtist.getString("nazwa"))
+                        editor.putString("${i}_rozmiar","${objectArtist.getString("rozmiar")}")
+                        editor.putString("${i}_data_", "${objectArtist.getString("data_")}")
+                        editor.putString("${i}_kopia", objectArtist.getString("kopia"))
                     }
 
 

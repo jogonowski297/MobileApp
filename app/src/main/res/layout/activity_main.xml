@@ -15,9 +15,11 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="370dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="30dp"
+            android:layout_width="371dp"
+            android:layout_height="107dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/opensns_semibold"
+            android:gravity="center"
             android:shadowColor="#0F3E0F"
             android:shadowDx="1.5"
             android:shadowDy="1.3"
@@ -26,7 +28,6 @@
             android:textColor="#038A03"
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.326"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,6 +49,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button"
                 android:text="Dodaj Zadanie"
+                android:fontFamily="@font/opensns_semibold"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
 
@@ -57,8 +59,9 @@
                 android:layout_width="110dp"
                 android:layout_height="90dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="17dp"
+
                 android:background="@drawable/button"
+                android:fontFamily="@font/opensns_semibold"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
 
@@ -67,6 +70,7 @@
                 android:layout_width="110dp"
                 android:layout_height="90dp"
                 android:layout_marginLeft="15dp"
+                android:fontFamily="@font/opensns_semibold"
                 android:background="@drawable/button"
                 android:text="Zamkniete Zadania"
                 android:textColor="@color/white"
@@ -94,6 +98,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button"
                 android:text="Kopie"
+                android:fontFamily="@font/opensns_semibold"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.313"

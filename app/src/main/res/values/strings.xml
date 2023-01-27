@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Company1</string>
     <string name="company">Company</string>
-    <string name="main_name">MobileApp</string>
+    <string name="main_name">Aplikacja mobilna MyApp</string>
 
 <!--    Menu Task-->
     <string name="end_task">Zakończ</string>

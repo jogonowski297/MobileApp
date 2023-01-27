@@ -49,14 +49,15 @@
                     android:id="@+id/id_task"
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:fontFamily="@font/opensns_semibold"/>
 
                 <TextView
                     android:id="@+id/textViewWorker"
                     android:layout_width="173dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-
+                    android:fontFamily="@font/opensns_semibold"
                     android:textSize="17sp" />
 
             </LinearLayout>
@@ -71,6 +72,7 @@
                     android:id="@+id/textViewCompany"
                     android:layout_width="86dp"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/opensans_light"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                     android:textSize="10sp" />
 
@@ -78,11 +80,13 @@
                     android:id="@+id/textViewDate"
                     android:layout_width="125dp"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/opensans_light"
                     android:textSize="10sp" />
                 <TextView
                     android:id="@+id/textViewDateClosed"
                     android:layout_width="125dp"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/opensans_light"
                     android:textSize="10sp" />
             </LinearLayout>
 
@@ -92,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:autoSizeTextType="uniform"
+                android:fontFamily="@font/opensns_semibold"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
