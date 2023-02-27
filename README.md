@@ -6,7 +6,7 @@ MobileApp has been created for small comapnies.
 Main task the application is magament of tasks assigned to emplyees. Everyone can create and delete all tasks. Every employee has own color (they can be declared in the database) so task browsing is easier.
 
 Add task - 
-Application sent POST method to php webpage then script update database on the same server.
+The application is executing the 'StringRequest' method by providing it with two arguments: 'POST method' and 'Web PHP link' then script update database on the same server.
 
 Get tasks - 
 Task are fetched from database by GET method. PHP script return JSON then are displayed in recycleView, application save this data on device memory so this allows you to view tasks without internet access.
